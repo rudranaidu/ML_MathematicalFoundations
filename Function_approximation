@@ -1,0 +1,336 @@
+1. Why Mathematics is Important in ML
+Mathematics gives precision.
+Human language is ambiguous, but mathematics is exact.
+Machine learning algorithms require precise definitions and calculations.
+Topics like probability, statistics, and linear algebra are essential for AI systems such as GPT and Gemini.
+2. Core Idea of Machine Learning
+
+Machine Learning tries to learn relationships between:
+
+inputs (X)
+outputs (Y)
+
+using data.
+
+This process is called:
+
+Function Approximation
+f:X→Y
+
+where:
+
+X = input space
+Y = output space
+3. Dataset Representation
+
+Since the true function is unknown, we collect observations:
+
+D={(x
+1
+	​
+
+,y
+1
+	​
+
+),(x
+2
+	​
+
+,y
+2
+	​
+
+),...,(x
+n
+	​
+
+,y
+n
+	​
+
+)}
+
+where:
+
+x
+i
+	​
+
+ = input
+y
+i
+	​
+
+ = output
+
+The goal is to estimate the unknown function using this data.
+
+4. Example of Function Approximation
+House Price Prediction
+
+Input:
+
+area,
+number of rooms,
+location.
+
+Output:
+
+price.
+
+Machine learning learns the hidden relationship between features and price.
+
+5. Historical Example
+
+Kepler and Gauss predicted planetary motion by:
+
+observing positions over time,
+estimating mathematical relationships.
+
+This is an early form of function approximation.
+
+6. What is a Model?
+
+A model is an approximation of the unknown function.
+
+Examples:
+
+linear model,
+quadratic model,
+neural network,
+decision tree.
+7. Learning Process
+Step 1 — Initial Guess
+
+Choose a family of functions.
+
+Step 2 — Learn from Data
+
+Adjust parameters using observations.
+
+Step 3 — Optimization
+
+Use algorithms like:
+
+Gradient Descent
+Backpropagation
+
+to improve the model.
+
+8. Types of Models
+Linear Model
+y=wx+b
+
+Simple straight-line relationship.
+
+Quadratic Model
+y=ax
+2
++bx+c
+
+Used for curved relationships.
+
+Decision Trees
+
+Rule-based predictions.
+
+Neural Networks
+
+Complex nonlinear models used in:
+
+GPT,
+image recognition,
+speech processing.
+9. Overfitting
+
+Overfitting occurs when:
+
+model memorizes training data,
+but performs poorly on unseen data.
+
+Goal of ML:
+
+Generalization
+
+not memorization.
+
+10. Famous Principle
+
+“All models are wrong, but some are useful.”
+
+Meaning:
+
+models are approximations,
+useful models capture important patterns.
+11. Data Representation in ML
+
+Computers understand numbers, not raw images or speech.
+
+Therefore:
+
+images,
+audio,
+text
+
+must be converted into vectors.
+
+12. Vector Representation
+
+An image of size:
+
+P×Q
+
+becomes a vector of length:
+
+PQ
+
+Example:
+A 100×100 image becomes a point in:
+
+R
+10000
+13. Deterministic Viewpoint
+
+Classical science uses exact relationships.
+
+Example:
+
+F=ma
+
+Given:
+
+mass,
+acceleration,
+
+force is exactly determined.
+
+Works well in:
+
+mechanics,
+physics.
+14. Limitation of Deterministic Models
+
+Complex AI tasks are too difficult to model exactly.
+
+Examples:
+
+speech recognition,
+language understanding,
+semantic meaning.
+
+These problems contain:
+
+uncertainty,
+ambiguity,
+noise.
+15. Probabilistic Viewpoint
+
+Modern ML uses probability.
+
+Instead of:
+
+Y=f(X)
+
+we treat:
+
+X and Y
+
+as random variables.
+
+Probability helps model uncertainty.
+
+16. Ignorance Modeling
+
+Speech scientists could not fully model vocal tract physics.
+
+Instead, they used:
+
+repeated observations,
+statistical methods.
+
+This was called:
+
+“Ignorance Modeling”
+
+Modern ML follows the same philosophy:
+
+when exact physics is too complex,
+learn statistical patterns from data.
+17. Important Probability Concepts
+Random Experiment
+
+Experiment with uncertain outcome.
+
+Example:
+
+coin toss.
+Sample Space
+
+Set of all possible outcomes.
+
+Example:
+
+S={H,T}
+Random Variable
+
+Maps outcomes to numbers.
+
+Example:
+
+X(H)=1,X(T)=0
+Probability Measure
+
+Assigns likelihood to events.
+
+Example:
+
+P(H)=0.5
+Probability Distribution
+
+Describes probability of values.
+
+Examples:
+
+Gaussian distribution,
+Bernoulli distribution.
+18. Large Language Models (LLMs)
+
+LLMs work probabilistically.
+
+Example:
+
+Input:
+
+“The sky is”
+
+Model predicts probabilities for:
+
+blue,
+cloudy,
+clear.
+
+Highest probability word is selected.
+
+19. Advanced Topics Mentioned
+
+The lecture mentions:
+
+Conditional Expectation
+Law of Large Numbers
+Convergence of Random Variables
+
+These are foundational for:
+
+deep learning,
+generative AI,
+transformers.
+Final Summary
+
+The lecture explains that:
+
+Machine learning starts with function approximation.
+Data is used to estimate unknown relationships.
+Complex real-world problems cannot be modeled deterministically.
+Therefore, modern ML relies heavily on probability and statistics.
+Modern AI systems are fundamentally probabilistic models.
