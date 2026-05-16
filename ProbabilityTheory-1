@@ -1,0 +1,187 @@
+Core Idea of Machine Learning
+
+Machine Learning is viewed as:
+
+f:X→Y
+
+where:
+
+X = input space
+Y = output space
+f = unknown mapping/function.
+
+Goal:
+
+estimate f using observed data.
+
+2. Function Approximation
+
+Dataset:
+
+D={(x
+1
+	​
+
+,y
+1
+	​
+
+),(x
+2
+	​
+
+,y
+2
+	​
+
+),...,(x
+n
+	​
+
+,y
+n
+	​
+
+)}
+
+Machine learning learns relationships from examples.
+
+Example
+X-ray image → Diseased / Not Diseased
+Email → Spam / Not Spam
+
+
+3. Why Deterministic Modeling Fails
+
+Exact physics is too complex for real-world AI tasks.
+
+Examples
+Coin toss prediction
+Speech recognition
+Medical diagnosis
+
+Hence:
+
+exact modeling becomes impractical.
+
+4. Statistical Learning
+
+Instead of exact physics:
+
+collect many observations,
+learn patterns statistically.
+
+This is the foundation of modern ML.
+
+5. Probability Theory
+
+Probability helps in:
+
+decision making under uncertainty.
+
+Even though decisions are final:
+
+the underlying data is uncertain.
+
+6. Random Experiment
+
+A process with uncertain outcome.
+
+Examples
+Tossing coin
+Taking X-ray
+Sending email
+
+Every ML data point is treated as:
+
+outcome of a random experiment.
+
+7. Sample Space
+
+Set of all possible outcomes.
+
+Denoted by:
+
+Ω
+Example
+
+Coin toss:
+
+Ω={H,T}
+
+8. Events
+
+Subsets of sample space are called:
+
+Events
+
+Example:
+
+A={H}
+
+
+9. Measure
+
+A measure quantifies subsets of a set.
+
+Example
+
+Length on real numbers.
+
+Probability is also a measure.
+
+
+10. Probability Measure
+
+Probability assigns values between:
+
+0≤P(A)≤1
+
+to events.
+
+Properties
+Entire sample space
+P(Ω)=1
+Empty set
+P(∅)=0
+Additivity
+
+If:
+
+A∩B=∅
+
+then:
+
+P(A∪B)=P(A)+P(B)
+11. Important Insight
+
+Probability is:
+
+a mathematical abstraction.
+
+Meaning is assigned later depending on application.
+
+
+12. Data Representation
+
+All data can be represented as:
+
+vectors
+
+Examples:
+
+images,
+text,
+speech,
+signals.
+13. Modern ML View
+
+Classical view:
+
+Y=f(X)
+
+Modern probabilistic view:
+
+(X,Y)∼P(X,Y)
+
+ML estimates probability distributions instead of exact functions.
