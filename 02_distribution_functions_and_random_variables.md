@@ -1,156 +1,255 @@
-# Probability Foundations for Machine Learning
-# Part 2 — Distribution Functions and Probability Distributions
+# Mathematical Foundations of Machine Learning
+# Random Variable vs Probability Distribution
+
+A very important question in probability and machine learning is:
+
+> What is the difference between a Random Variable and a Probability Distribution?
+
+Many beginners confuse these two concepts.
+
+The key difference is:
+
+- Random Variable converts abstract outcomes into numbers.
+- Probability Distribution tells how probabilities are assigned to those numbers.
 
 ---
 
-# 1. Random Variable vs Probability Distribution
+# 1. Big Picture
 
-This is one of the most important concepts in probability.
+Suppose we toss a coin.
+
+The random experiment is:
+
+> Tossing a coin
+
+Sample space:
+
+$$
+\Omega = \{H, T\}
+$$
+
+where:
+- $H$ = Head
+- $T$ = Tail
 
 ---
 
 # 2. Random Variable
 
-A random variable maps outcomes into numbers.
+Now define a random variable:
 
 $$
-X : \Omega \rightarrow \mathbb{R}
-$$
-
-Example:
-
-$$
-X(H)=1
+X(H) = 1
 $$
 
 $$
-X(T)=0
+X(T) = 0
 $$
+
+What happened?
+
+The random variable converted:
+
+- $H \rightarrow 1$
+- $T \rightarrow 0$
+
+So instead of working with abstract symbols:
+- H
+- T
+
+we can now work with numbers:
+- 0
+- 1
+
+This is the job of a:
+
+# Random Variable
 
 ---
 
-# 3. Probability Distribution
+# 3. What Does Probability Distribution Do?
 
-A probability distribution tells how probabilities are assigned over values of the random variable.
+Now we ask:
 
-Example:
+> How likely is each number?
 
-$$
-P(X=1)=0.5
-$$
+We know:
 
 $$
-P(X=0)=0.5
+P(H) = 0.5
 $$
+
+$$
+P(T) = 0.5
+$$
+
+Since:
+
+$$
+X(H) = 1
+$$
+
+$$
+X(T) = 0
+$$
+
+the probabilities get transferred onto numbers.
+
+So we obtain:
+
+$$
+P(X = 1) = 0.5
+$$
+
+$$
+P(X = 0) = 0.5
+$$
+
+This is called the:
+
+# Probability Distribution
 
 ---
 
 # 4. Core Difference
 
-| Concept | Meaning |
+| Concept | Purpose |
 |---|---|
 | Random Variable | Converts outcomes into numbers |
 | Probability Distribution | Assigns probabilities to those numbers |
 
 ---
 
-# 5. Distribution Function
+# 5. Mathematical Difference
 
-For a random variable:
+## Random Variable
+
+A function:
 
 $$
 X : \Omega \rightarrow \mathbb{R}
 $$
 
-the induced distribution is:
+Input:
+- sample space outcomes.
 
-$$
-P_X
-$$
+Output:
+- real numbers.
 
-This is called:
-- Distribution Function
-- CDF
-- Pushforward Measure
+## Probability Distribution
 
----
+A measure on real numbers.
 
-# 6. Cumulative Distribution Function (CDF)
+It tells:
 
-The CDF is defined as:
-
-$$
-F_X(x)=P(X \le x)
-$$
-
-Meaning:
-Probability that the random variable takes value less than or equal to $x$.
+> How probability is distributed over values of $X$
 
 ---
 
-# 7. Probability Density Function (PDF)
+# 6. Another Example — Dice
 
-For continuous variables:
-
-$$
-p(x)\ge0
-$$
-
-and:
+## Step 1: Sample Space
 
 $$
-\int_{-\infty}^{\infty} p(x)\,dx = 1
+\Omega = \{1,2,3,4,5,6\}
 $$
 
-Relationship between PDF and CDF:
+## Step 2: Random Variable
+
+Suppose:
 
 $$
-F_X(x)=\int_{-\infty}^{x} p_X(t)\,dt
+X(\omega) = \omega
 $$
+
+(identity mapping)
+
+## Step 3: Probability Distribution
+
+Distribution becomes:
+
+| X value | Probability |
+|---|---|
+| 1 | 1/6 |
+| 2 | 1/6 |
+| 3 | 1/6 |
+| 4 | 1/6 |
+| 5 | 1/6 |
+| 6 | 1/6 |
 
 ---
 
-# 8. Important Clarification
+# 7. In Machine Learning
 
-For continuous random variables:
+Random variables convert:
+- images,
+- speech,
+- text,
+- physical measurements
 
-$$
-P(X=x)=0
-$$
+into vectors.
 
-A density value itself is NOT a probability.
-
-Probabilities are obtained by integration over intervals.
-
----
-
-# 9. Probability Mass Function (PMF)
-
-For discrete variables:
-
-$$
-P(X=x_i)
-$$
-
-Example for dice:
-
-$$
-P(X=1)=\frac{1}{6}
-$$
-
----
-
-# 10. Higher Dimensional Distributions
-
-In ML:
+Example:
 
 $$
 X : \Omega \rightarrow \mathbb{R}^d
 $$
 
-Examples:
-- images,
-- embeddings,
-- speech vectors.
+Image becomes:
 
-The distribution now exists over multidimensional space.
+$$
+x \in \mathbb{R}^d
+$$
+
+Probability Distribution then asks:
+
+- What is the probability of seeing this image?
+- What is the probability of this label given this image?
+
+Examples:
+
+$$
+P(X)
+$$
+
+$$
+P(Y|X)
+$$
+
+$$
+P(X,Y)
+$$
+
+---
+
+# 8. Most Important Intuition
+
+Think like this:
+
+## Random Variable
+
+Creates the coordinate system.
+
+## Probability Distribution
+
+Describes how data is spread inside that coordinate system.
+
+---
+
+# 9. Final One-Line Difference
+
+## Random Variable
+
+Maps:
+
+$$
+\text{outcomes} \rightarrow \text{numbers}
+$$
+
+## Probability Distribution
+
+Maps:
+
+$$
+\text{numbers} \rightarrow \text{probabilities}
+$$
