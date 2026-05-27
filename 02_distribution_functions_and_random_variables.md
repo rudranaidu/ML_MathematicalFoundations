@@ -48,9 +48,9 @@ Another way to remember it:
 ## 4. Mathematical difference
 A random variable is a function:
 
-\[
-X : \Omega \to \mathbb{R}
-\]
+$$
+X : \Omega \rightarrow \mathbb{R}
+$$
 
 A probability distribution is a measure on the range space of X. It tells how probability is distributed over values of X.
 
