@@ -1,0 +1,78 @@
+We are given a dataset: D={x1​,x2​,...,xn​}
+These samples come from some unknown real-world probability distribution: PX​
+But we do not know this distribution explicitly.
+
+Step 1 — Represent Data Numerically
+    Real-world objects like:
+    
+    images,
+    text,
+    speech,
+    videos
+    
+  cannot be processed directly by computers.
+    
+  So we use a random variable: X:Ω→Rd
+  
+  This converts real-world outcomes into vectors in high-dimensional space.
+  
+  Example:
+  
+  image → vector,
+  sentence → embedding vector.
+
+Step 2 — Assume Data Comes From a Probability Distribution
+
+  Once data becomes vectors: x∈Rd
+  we assume these vectors are generated from an unknown probability distribution: PX​
+  This distribution captures:
+  
+  patterns,
+  structure,
+  correlations,
+  semantics,
+  textures,
+  grammar,
+  meaning.
+
+Step 3 — Introduce a Model Distribution
+
+  Since we cannot directly compute: PX , we introduce a parametric model:
+  where: θ represents neural network parameters:
+    weights,
+    biases,
+    matrices.
+  This model is our approximation to the real distribution.
+
+Step 4 — Compare Model Distribution With Real Distribution
+
+  Now we measure:
+      D(PX​,Pθ​)
+  
+  This tells us:
+  
+  how different our model is from the real-world distribution.
+  
+  Examples of distance measures:
+  
+  KL divergence,
+  Wasserstein distance,
+  Cross entropy.
+
+Step 5 — Learn By Minimizing Distance
+    We repeatedly adjust: θ
+    so that: D(PX,Pθ) becomes smaller.
+    
+    Meaning:
+    model-generated samples become more realistic,
+    model distribution becomes closer to real data distribution.
+
+Step 6 — Final Goal
+
+  After training:
+  P θ ≈ PX
+  Now the model has learned an approximation of the real-world distribution.
+
+
+    
+
