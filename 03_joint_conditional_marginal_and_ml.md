@@ -1,224 +1,274 @@
-# Joint, Conditional, Marginal Distributions and the Machine Learning View
+# Mathematical Foundations of Machine Learning
+# Distribution Functions, Joint Probability and ML
 
-## 1. Multiple random variables on the same sample space
-Often we need more than one random variable on the same underlying sample space.
+---
+
+# 1. Distribution Function
+
+For a random variable:
+
+$$
+X : \Omega \rightarrow \mathbb{R}
+$$
+
+the induced distribution is denoted by:
+
+$$
+P_X
+$$
+
+This is called:
+- Distribution Function
+- Cumulative Distribution Function (CDF)
+- Push Forward Measure
+
+---
+
+# 2. Cumulative Distribution Function
+
+The CDF is defined as:
+
+$$
+F_X(x)=P(X \le x)
+$$
+
+Meaning:
+- probability that random variable takes value less than or equal to $x$.
+
+---
+
+# 3. Vector-Valued Random Variables
+
+In ML:
+
+$$
+X : \Omega \rightarrow \mathbb{R}^d
+$$
 
 Examples:
-- X = image
-- Y = label
-
-or
-- X1 = age
-- X2 = blood pressure
-
-These variables can be studied together.
+- images,
+- embeddings,
+- speech vectors.
 
 ---
 
-## 2. Joint distribution
-The joint distribution describes the probability of variables occurring together.
+# 4. Joint Distribution
 
-If two random variables are X and Y, then the joint distribution is written as:
+Suppose:
 
-\[
-P_{XY}
-\]
+$$
+X_1 : \Omega \rightarrow \mathbb{R}
+$$
 
-It describes how the pair \((X, Y)\) behaves together.
+$$
+X_2 : \Omega \rightarrow \mathbb{R}
+$$
 
-### Example
-In medical diagnosis:
-- X = image or measurement
-- Y = disease label
+Then the joint distribution is:
 
-The joint distribution models how the image and the label occur together.
-
----
-
-## 3. Conditional probability
-Conditional probability means the probability of one event given another event has already happened.
-
-\[
-P(A|B)=\frac{P(A \cap B)}{P(B)}
-\]
-
-### Example
-- A = person has a disease
-- B = test is positive
-
-Then \(P(A|B)\) means the probability that the person has the disease given a positive test.
+$$
+P_{X_1X_2}
+$$
 
 ---
 
-## 4. Conditional distribution in machine learning
-In ML, conditional distributions are very important.
+# 5. Conditional Probability
 
-We often want:
+Conditional probability means probability of $A$ given $B$.
 
-\[
-P(Y|X)
-\]
-
-This means the probability of output Y given input X.
-
-This is the heart of supervised learning and classification.
+$$
+P(A \mid B)=\frac{P(A \cap B)}{P(B)}
+$$
 
 ---
 
-## 5. Marginal distribution
-A marginal distribution is obtained by looking at only one variable from a joint distribution and ignoring the others.
+# 6. Marginal Distribution
 
-If we have \(P_{XY}\), then:
-- \(P_X\) is the marginal distribution of X
-- \(P_Y\) is the marginal distribution of Y
+Suppose we have:
 
-### Intuition
-If X is an image and Y is its label:
-- \(P_X\) tells how images are distributed
-- \(P_Y\) tells how labels are distributed
+$$
+P(X,Y)
+$$
+
+Marginal distributions are:
+
+$$
+P(X)
+$$
+
+and
+
+$$
+P(Y)
+$$
+
+obtained by ignoring the other variable.
 
 ---
 
-## 6. Why marginal distributions matter
-Many ML tasks require understanding the distribution of inputs alone, outputs alone, or the pair together.
+# 7. IID Assumption
 
-Examples:
-- estimating how often each label appears
-- understanding the data distribution of images
-- modeling the relationship between features and targets
+Machine learning usually assumes data is:
+
+- Independent
+- Identically Distributed
 
 ---
 
-## 7. IID assumption
-IID means:
-- **Independent**
-- **Identically Distributed**
+# 8. Independence
 
-### Independent
 Two events are independent if:
-\[
+
+$$
 P(A \cap B)=P(A)P(B)
-\]
-
-### Identically distributed
-All data points are assumed to come from the same underlying distribution.
-
-This is a common assumption in machine learning datasets.
+$$
 
 ---
 
-## 8. Dataset representation
-A supervised dataset is usually written as:
+# 9. Dataset Representation
 
-\[
+Most ML datasets look like:
+
+$$
 D=\{(x_1,y_1),(x_2,y_2),\dots,(x_n,y_n)\}
-\]
+$$
 
 where:
-- \(x_i\) = input / features
-- \(y_i\) = label / output
-
-The dataset is often modeled as samples drawn independently and identically from an unknown distribution.
+- $x_i$ = input/features
+- $y_i$ = labels/outputs
 
 ---
 
-## 9. ML tasks from a probabilistic view
-Different tasks correspond to different distributions.
+# 10. Classification
 
-### Classification
-Labels are discrete:
-\[
+Classification estimates:
+
+$$
+P(Y \mid X)
+$$
+
+where:
+
+$$
 Y \in \{1,2,\dots,K\}
-\]
+$$
 
 Examples:
-- spam / not spam
-- cat / dog
-- positive / negative sentiment
+- spam detection,
+- disease prediction,
+- sentiment analysis.
 
-### Regression
-Outputs are continuous:
-\[
+---
+
+# 11. Regression
+
+Regression predicts continuous outputs:
+
+$$
 Y \in \mathbb{R}^k
-\]
+$$
 
 Examples:
-- house price prediction
-- temperature forecasting
-- age estimation
-
-### Segmentation
-Segmentation predicts a label for many pixels. In practice this behaves like a structured prediction or regression-style task over image space.
+- house prices,
+- temperatures,
+- stock values.
 
 ---
 
-## 10. Supervised, unsupervised, and generative viewpoints
-### Supervised learning
-Estimate:
-\[
-P(Y|X)
-\]
+# 12. Generative vs Discriminative Models
 
-### Unsupervised learning
-Often focuses on marginals or structure in inputs, such as \(P(X)\).
+## Discriminative Models
 
-### Generative modeling
-Estimate:
-\[
-P(X)\ \text{or}\ P(X,Y)
-\]
+Learn:
 
-and generate new samples from the learned distribution.
+$$
+P(Y \mid X)
+$$
 
----
+## Generative Models
 
-## 11. Discriminative vs generative models
-### Discriminative models
-Learn conditional relationships, especially \(P(Y|X)\).
+Learn:
 
-Examples:
-- logistic regression
-- support vector machines
-- neural-network classifiers
+$$
+P(X)
+$$
 
-### Generative models
-Learn how data itself is distributed and can generate new examples.
+or
+
+$$
+P(X,Y)
+$$
+
+and can generate new samples.
 
 Examples:
 - GANs
+- Diffusion Models
 - VAEs
-- diffusion models
-- language models such as GPT-style systems
+- LLMs
 
 ---
 
-## 12. Function approximation and probabilistic view
-Machine learning is often described as function approximation:
+# 13. Probability Density Function (PDF)
 
-\[
-f : X \to Y
-\]
+For continuous variables:
 
-But in reality, modern ML is more naturally probabilistic. Instead of only learning a deterministic function, the model often estimates distributions such as \(P(Y|X)\), \(P(X)\), or \(P(X,Y)\).
+$$
+p(x)\ge0
+$$
 
----
+and:
 
-## 13. Why the probabilistic view matters
-Real-world problems are noisy and uncertain.
+$$
+\int_{-\infty}^{\infty} p(x)\,dx = 1
+$$
 
-Examples:
-- speech recognition
-- image understanding
-- medical diagnosis
-- language generation
+Relationship between PDF and CDF:
 
-Probability gives a mathematical way to handle uncertainty and make predictions under incomplete information.
+$$
+F_X(x)=\int_{-\infty}^{x} p_X(t)\,dt
+$$
 
 ---
 
-## 14. Final big picture
-The learner should remember this flow:
+# 14. Important Clarification
 
-**Random experiment → sample space → events → probability measure → random variables → distributions → joint/conditional/marginal relationships → machine learning**
+For continuous random variables:
 
-Modern ML systems learn from data by estimating distributions and using them for prediction or generation.
+$$
+P(X=x)=0
+$$
+
+A density value itself is NOT a probability.
+
+Probabilities are obtained by integration over intervals.
+
+---
+
+# 15. Final Big Picture
+
+Modern machine learning views data as:
+- vectors generated from random variables,
+- governed by probability distributions.
+
+Learning means estimating these hidden probability distributions from data.
+
+---
+
+# 16. Main Conceptual Flow
+
+$$
+\text{Random Experiment}
+\rightarrow
+\Omega
+\rightarrow
+X
+\rightarrow
+\mathbb{R}^d
+\rightarrow
+P_X
+\rightarrow
+D
+\rightarrow
+\text{Machine Learning}
+$$
