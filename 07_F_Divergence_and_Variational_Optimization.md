@@ -13,9 +13,7 @@ $$
 
 But how do we measure:
 
-"how close"
-
-two distributions are?
+"how close two distributions are?"
 
 ---
 
