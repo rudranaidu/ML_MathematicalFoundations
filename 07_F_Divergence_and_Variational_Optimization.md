@@ -242,18 +242,7 @@ $$
 
 Substituting into the F-divergence formula yields
 
-$$
-D_{KL}(P_X \,\|\, P_\theta)
-=
-\int
-P_X(x)
-\log
-\left(
-\frac{P_X(x)}
-     {P_\theta(x)}
-\right)
-dx.
-$$
+$$D_{KL}(P_X || P_\theta)=\int P_X(x)\log\left(\frac{P_X(x)}{P_\theta(x)}\right)dx$$
 
 ---
 
