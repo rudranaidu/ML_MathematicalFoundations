@@ -60,18 +60,35 @@ more different
 
 General family:
 
+### F-Divergence
+
+The F-divergence between two probability distributions
+$P_X$ and $P_\theta$ is defined as
+
 $$
-D_f(P_X||P_\theta)
+D_f(P_X \,\|\, P_\theta)
 =
 \int
 P_\theta(x)
-f\left(
+\,
+f\!\left(
 \frac{P_X(x)}
-{P_\theta(x)}
+     {P_\theta(x)}
 \right)
 dx
 $$
 
+where
+
+$$
+f : \mathbb{R}^{+} \rightarrow \mathbb{R}
+$$
+
+is a convex function satisfying
+
+$$
+f(1)=0.
+$$
 ---
 
 # Intuition
