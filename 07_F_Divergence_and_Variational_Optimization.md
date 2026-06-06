@@ -251,29 +251,22 @@ $$ P_X || P_\theta) pronounced as P X relative to P theta
 # 8. Intuition Behind KL Divergence
 
 KL divergence measures:
+The gap between what you believed and what actually happened
+is what KL divergence measures.
 
-> How surprised we become when we use the wrong distribution.
+## GPS Analogy
 
----
+Suppose Google Maps says:
 
-## Coin Toss Example
+Road A is the fastest route.
 
-Suppose the true coin is:
+But reality is:
 
-$$
-P(H)=0.9
-$$
+Road A is blocked.
 
-but the model assumes:
+You keep taking the wrong road.
 
-$$
-P(H)=0.5.
-$$
-
-The model repeatedly gets surprised.
-
-KL divergence becomes large.
-
+The cost of using the wrong map becomes large.
 ---
 
 ## Interpretation
