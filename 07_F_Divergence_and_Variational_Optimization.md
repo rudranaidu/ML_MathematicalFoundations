@@ -79,32 +79,6 @@ $$f:\mathbb{R}^{+}\rightarrow\mathbb{R}$$
 is a convex function satisfying
 
 $$f(1)=0$$
-
-$$
-D_f(P_X \,\|\, P_\theta)
-=
-\int
-P_\theta(x)
-\,
-f\!\left(
-\frac{P_X(x)}
-     {P_\theta(x)}
-\right)
-dx
-$$
-
-where
-
-$$
-f : \mathbb{R}^{+} \rightarrow \mathbb{R}
-$$
-
-is a convex function satisfying
-
-$$
-f(1)=0.
-$$
-
 ---
 
 # 4. Understanding the Formula
