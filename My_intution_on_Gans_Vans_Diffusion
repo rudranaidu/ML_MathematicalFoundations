@@ -1,0 +1,15 @@
+Unknown Distribution PX
+          ↓
+Learn a model Pθ
+          ↓
+Minimize divergence
+          ↓
+Pθ approaches PX
+          ↓
+Generate new samples
+
+GANs do this using adversarial optimization.
+
+VAEs do this using latent-variable inference.
+
+Diffusion models do this using denoising.
