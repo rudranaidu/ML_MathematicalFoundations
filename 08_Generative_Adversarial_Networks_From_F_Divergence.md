@@ -1,776 +1,418 @@
 # 1. Where We Are in the Story
 
-Recall the goal of Generative Modeling:
+Recall the generative modeling goal:
 
-Given samples
+$$
+D = \{x_1, x_2, \ldots, x_N\}
+$$
 
-\[
-D = \{x_1,x_2,\ldots,x_N\}
-\]
+where the dataset consists of samples drawn from an unknown true distribution
 
-generated from some unknown distribution
+$$
+P_X.
+$$
 
-\[
-P_X
-\]
+We want to learn a model distribution
 
-we want to learn a model
-
-\[
+$$
 P_\theta
-\]
+$$
 
 such that
 
-\[
-P_\theta \approx P_X
-\]
+$$
+P_\theta \approx P_X,
+$$
 
-and then generate new samples from it.
+and then sample from the learned model.
 
 ---
 
 # 2. The Central Problem
 
-We need a way to measure:
+We want a way to measure how close the model distribution is to the true distribution:
 
-\[
-P_X
-\]
+$$
+P_X \quad \text{vs.} \quad P_\theta
+$$
 
-vs
+That comparison is done using a divergence measure.
 
-\[
-P_\theta
-\]
+Examples include:
 
-How close are they?
+- KL divergence
+- Reverse KL divergence
+- Jensen-Shannon divergence
+- Pearson divergence
+- Chi-square divergence
 
-This is done using a **divergence measure**.
-
-Examples:
-
-- KL Divergence
-- Reverse KL
-- Jensen-Shannon Divergence
-- Pearson Divergence
-- Chi-Square Divergence
-
-All belong to the family:
-
-\[
-D_f(P_X,P_\theta)
-\]
-
-called **F-Divergences**.
+These belong to the family of **F-divergences**.
 
 ---
 
 # 3. Why F-Divergence Is Difficult
 
-The original divergence contains:
+The original divergence depends explicitly on the densities of both distributions.
 
-\[
-P_X
-\]
+But in practice we do **not** know the densities of either:
 
-and
-
-\[
-P_\theta
-\]
-
-explicitly.
-
-Problem:
-
-We do not know either density.
+$$
+P_X \quad \text{or} \quad P_\theta.
+$$
 
 We only have samples.
 
-Therefore:
-
-We cannot directly compute
-
-\[
-D_f(P_X,P_\theta)
-\]
+So the direct computation of the divergence is not possible.
 
 ---
 
 # 4. The Key Machine Learning Trick
 
-Machine learning repeatedly uses one powerful idea:
-
-## Law of Large Numbers
-
-Instead of computing expectations from distributions,
-
-compute them using sample averages.
+A central idea in machine learning is that expectations can be estimated from samples.
 
 If
 
-\[
-X \sim P_X
-\]
+$$
+X \sim P_X,
+$$
 
 then
 
-\[
-E[h(X)]
-\]
+$$
+\mathbb{E}[h(X)]
+$$
 
-can be approximated as
+can be approximated by the sample average
 
-\[
-\frac{1}{N}
-\sum_{i=1}^{N}
-h(x_i)
-\]
+$$
+\frac{1}{N} \sum_{i=1}^N h(x_i).
+$$
 
-for sufficiently large N.
+This is the law of large numbers in action.
 
----
+## Intuition
 
-## Real World Intuition
+If you want the average height of a population, you do not need the full distribution. You measure many people and average their heights.
 
-Suppose you want the average human height.
-
-You do not know the true distribution of human heights.
-
-Measure 10,000 people.
-
-Average them.
-
-Done.
-
-Machine learning works exactly the same way.
+That is exactly what this approximation does.
 
 ---
 
 # 5. Why Convex Conjugates Are Introduced
 
-The original F-divergence is impossible to compute because it requires density functions.
+The goal is to rewrite the F-divergence into a form involving expectations, because expectations can be estimated from samples.
 
-The goal is:
+Convexity theory gives us a way to do that using the **convex conjugate**.
 
-Convert
+This leads to the variational form:
 
-\[
-D_f(P_X,P_\theta)
-\]
-
-into a form involving expectations.
-
-Expectations can then be estimated using samples.
-
-To achieve this, convexity theory introduces:
-
-- Convex functions
-- Convex conjugates
-
-which allow the divergence to be rewritten as:
-
-\[
-D_f(P_X,P_\theta)
+$$
+D_f(P_X, P_\theta)
 \ge
 \sup_T
 \left(
-E_{P_X}[T(x)]
+\mathbb{E}_{P_X}[T(x)]
 -
-E_{P_\theta}[F^*(T(x))]
-\right)
-\]
+\mathbb{E}_{P_\theta}[F^*(T(x))]
+\right),
+$$
 
-where
+where:
 
-\[
-F^*
-\]
+- $F^*$ is the convex conjugate of the chosen convex function $F$
+- $T(x)$ is a learnable function over the input space
 
-is the convex conjugate.
-
----
-
-# 6. What Does "Variational" Mean?
-
-The word sounds scary.
-
-It actually means:
-
-> Represent a quantity as an optimization problem.
-
-Instead of directly computing divergence,
-
-we search for the best function
-
-\[
-T(x)
-\]
-
-that maximizes the above expression.
-
-This is why the method is called:
-
-**Variational Divergence Minimization (VDM)**.
+This is the bridge from abstract divergence theory to something computable.
 
 ---
 
-# 7. Why Does Supremum Appear?
+# 6. What “Variational” Means
 
-Students asked this question during class.
+The word **variational** means we turn the problem into an optimization problem.
 
-The answer:
+Instead of computing the divergence directly, we search for the best function $T(x)$ that maximizes the objective above.
 
-The convex conjugate itself contains a maximization problem.
+That is why the framework is called **Variational Divergence Minimization (VDM)**.
 
-That maximization survives throughout the derivation and appears as
+---
 
-\[
+# 7. Why the Supremum Appears
+
+The supremum appears because the convex conjugate itself is defined through an optimization problem.
+
+So the maximization survives into the final variational form.
+
+That is why the result is written with
+
+$$
 \sup_T
-\]
+$$
 
-in the final equation.
+instead of a simple closed-form expression.
 
 ---
 
 # 8. Why Equality Becomes Inequality
 
-Ideally:
+Ideally, we would like an equality:
 
-\[
-D_f
-=
-\sup(...)
-\]
+$$
+D_f = \sup(\cdots)
+$$
 
-However in practice:
+But in practice we only search over a restricted family of functions.
 
-\[
-D_f
-\ge
-\sup(...)
-\]
+So the result becomes a lower bound:
 
-because we search only inside a restricted family of functions.
+$$
+D_f \ge \sup(\cdots)
+$$
 
----
+## Intuition
 
-## Real World Analogy
+Suppose you want the best singer in the world, but you only search among singers in one city. You may not find the global best. You only find the best inside your restricted search space.
 
-Suppose you want the world's best singer.
-
-But you are allowed to search only inside Bangalore.
-
-The best singer in Bangalore may not be the best singer in the world.
-
-Therefore your result becomes a lower bound.
-
-The same thing happens here.
+That is what is happening here.
 
 ---
 
-# 9. The Biggest Question
+# 9. How Do We Get Samples From $P_\theta$?
 
-How do we get samples from
+This is the major generative modeling idea.
 
-\[
-P_\theta
-\]
+Start with a known distribution such as:
 
-?
-
-Until now we only talked about distributions.
-
-We still need a mechanism that generates samples.
-
----
-
-# 10. Sampling Through Neural Networks
-
-Start with a known distribution:
-
-\[
-z \sim N(0,1)
-\]
+$$
+z \sim \mathcal{N}(0, I)
+$$
 
 or
 
-\[
-z \sim U(0,1)
-\]
+$$
+z \sim U(0,1).
+$$
 
-We know how to sample these using random number generators.
+We know how to sample from such distributions using random number generators.
 
-Now define:
+Now define a deterministic neural network:
 
-\[
-x = G_\theta(z)
-\]
+$$
+x = G_\theta(z).
+$$
 
-where
-
-\[
-G_\theta
-\]
-
-is a neural network.
+Then the output has its own distribution, which depends on the function $G_\theta$.
 
 ---
 
-# 11. A Deep Probability Result
+# 10. Deterministic Functions Change Distributions
 
 If
 
-\[
+$$
 z \sim P_Z
-\]
+$$
 
 and
 
-\[
-x = G(z)
-\]
+$$
+x = G(z),
+$$
 
-then
+then $x$ becomes a new random variable with a new distribution.
 
-\[
-x
-\]
+So a deterministic transformation can map a simple distribution into a more complex one.
 
-has a new distribution.
+## Intuition
 
-A deterministic transformation changes distributions.
+Think of a machine that takes random clay balls and reshapes them into faces. The output distribution is now about faces, even though the input was just random noise.
+
+That machine is the neural network $G_\theta$.
 
 ---
 
-## Real World Analogy
+# 11. Neural Networks as Distribution Transformers
 
-Imagine:
+This is one of the most important ideas in generative modeling.
 
-Input:
+The generator network
 
-- random clay balls
-
-Machine:
-
-- reshapes them
-
-Output:
-
-- human faces
-
-The output distribution differs from the input distribution.
-
-The reshaping machine is:
-
-\[
+$$
 G_\theta
-\]
+$$
+
+takes noise samples $z$ and transforms them into samples from a learned model distribution
+
+$$
+P_\theta.
+$$
+
+So the generator is a sampler.
+
+Changing $\theta$ changes the output distribution.
+
+That means $\theta$ is the knob we tune.
 
 ---
 
-# 12. Neural Networks as Distribution Transformers
+# 12. The GAN Setup
 
-This is one of the most important ideas in Generative AI.
-
-Neural network:
-
-\[
-G_\theta
-\]
-
-takes
-
-\[
-z \sim N(0,1)
-\]
-
-and transforms it into
-
-\[
-x \sim P_\theta
-\]
-
-Thus:
-
-\[
-G_\theta
-\]
-
-acts as a sampler.
-
----
-
-# 13. Why Theta Matters
-
-Changing
-
-\[
-\theta
-\]
-
-changes
-
-\[
-P_\theta
-\]
-
-Therefore:
-
-Theta is the only knob we have.
-
-Adjusting theta changes the generated distribution.
-
-The goal is:
-
-\[
-P_\theta \rightarrow P_X
-\]
-
----
-
-# 14. The GAN Idea
-
-Now we have:
+We now have two neural networks:
 
 ## Generator
 
-\[
+$$
 G_\theta
-\]
+$$
 
-Generates samples from
+This maps noise to generated samples.
 
-\[
-P_\theta
-\]
+## Discriminator / Critic
 
----
-
-## Critic / Discriminator
-
-\[
+$$
 T_w
-\]
+$$
 
-Measures how different
-
-\[
-P_\theta
-\]
-
-is from
-
-\[
-P_X
-\]
+This approximates the variational function $T(x)$ used in the F-divergence bound.
 
 ---
 
-# 15. Two Optimization Problems
+# 13. Two Optimization Problems
 
-The F-divergence itself requires solving:
+The VDM objective naturally creates two nested optimization problems:
 
-\[
-\max_w
-\]
+1. **Inner maximization** over $w$ to estimate the divergence.
+2. **Outer minimization** over $\theta$ to make $P_\theta$ closer to $P_X$.
 
-to compute the divergence.
+So the overall game is:
 
-After computing divergence:
-
-\[
-\min_\theta
-\]
-
-to reduce it.
-
-Thus:
-
-\[
-\min_\theta
-\max_w
-J(\theta,w)
-\]
+$$
+\min_\theta \max_w J(\theta, w).
+$$
 
 ---
 
-# 16. Why GANs Are Called Adversarial
+# 14. Why GANs Are Called Adversarial
 
-The same objective is:
+The same objective is being optimized in opposite directions:
 
-Maximized by one network.
+- the discriminator tries to maximize the objective
+- the generator tries to minimize it
 
-Minimized by another network.
+That is why the setup is called **adversarial**.
 
----
+## Intuition
 
-Generator:
+Think of a counterfeiter and a fraud detector.
 
-tries to minimize divergence.
+- The counterfeiter tries to make fake notes look real.
+- The fraud detector tries to spot the fake notes.
 
-Discriminator:
-
-tries to maximize divergence estimate.
-
----
-
-## Real World Analogy
-
-Counterfeit money factory:
-
-Generator:
-creates fake notes.
-
-Discriminator:
-tries to detect fake notes.
-
-Both continuously improve.
+Each side forces the other to improve.
 
 ---
 
-# 17. Saddle Point Optimization
+# 15. Saddle Point Optimization
 
-GAN training is not ordinary optimization.
+This is not ordinary minimization.
 
-It seeks:
+We are looking for a saddle point:
 
-\[
-(\theta^*,w^*)
-\]
+$$
+(\theta^*, w^*)
+$$
 
-such that
+such that the objective decreases in one direction and increases in another.
 
-\[
-\min_\theta
-\max_w
-J(\theta,w)
-\]
+That is why GAN training is often unstable.
 
-This point is called a saddle point.
+Most optimization problems avoid saddle points. GANs intentionally search for one.
 
 ---
 
-## Horse Saddle Intuition
+# 16. The Classifier Interpretation
 
-Move in one direction:
+For one particular F-divergence choice, the discriminator output lies in $[0,1]$ and can be interpreted as a probability.
 
-Function increases.
+Then the discriminator behaves like a binary classifier:
 
-Move in another direction:
+- output 1 for real samples
+- output 0 for generated samples
 
-Function decreases.
+This gives a useful intuition, but it is **not** the general story for all F-divergences.
 
-This shape resembles a horse saddle.
-
----
-
-# 18. Why GAN Training Is Difficult
-
-Most optimization algorithms try to avoid saddle points.
-
-GANs intentionally seek them.
-
-Therefore GAN training is often:
-
-- unstable
-- oscillatory
-- difficult to converge
+The deeper general idea is still distribution matching through divergence minimization.
 
 ---
 
-# 19. Discriminator as a Classifier
+# 17. GAN Training in Practice
 
-For Jensen-Shannon Divergence:
+Training alternates between two steps.
 
-The discriminator output lies between
+## Step 1: Train the discriminator
 
-0 and 1.
+- sample real data from $P_X$
+- sample noise $z$
+- generate fake samples $G_\theta(z)$
+- update $w$ to improve the discriminator objective
 
-Therefore it can be interpreted as a probability.
+## Step 2: Train the generator
 
-This allows us to view it as a binary classifier.
+- freeze $w$
+- sample noise again
+- generate fake samples
+- update $\theta$ to reduce the objective
 
----
-
-Output:
-
-1 → Real sample
-
-0 → Fake sample
-
----
-
-# 20. Classifier-Guided Generation
-
-Imagine:
-
-Classifier distinguishes:
-
-- Real images
-- Generated images
-
-Generator keeps changing until classifier fails.
-
-When classifier can no longer distinguish:
-
-\[
-P_\theta
-\approx
-P_X
-\]
+Then repeat.
 
 ---
 
-# 21. Why This Interpretation Is Limited
+# 18. Why the Initial Samples Look Bad
 
-Prof. Prathosh repeatedly warns:
+At the beginning, the generator is untrained.
 
-This classifier interpretation works only for specific divergences.
+So the fake samples look like noise or junk.
 
-For other F-divergences:
-
-- No classifier interpretation exists.
-- No "fooling the discriminator" story exists.
-
-The general viewpoint remains:
-
-**Distribution Matching via Divergence Minimization.**
+As training proceeds, the divergence decreases and the generated samples become closer to the real data distribution.
 
 ---
 
-# 22. GAN Training Algorithm
+# 19. How the Expectations Are Computed
 
-Step 1:
+The objective contains expectations under two distributions:
 
-Sample real data
+- $\mathbb{E}_{P_X}[\cdot]$
+- $\mathbb{E}_{P_\theta}[\cdot]$
 
-\[
-x_i \sim P_X
-\]
+These are approximated using mini-batches.
 
----
+For real data, we use a batch of samples from the dataset.
 
-Step 2:
+For generated data, we sample $z$ from the noise distribution and pass it through $G_\theta$.
 
-Sample noise
-
-\[
-z_i \sim N(0,1)
-\]
-
-Generate
-
-\[
-x_i^{fake}
-=
-G_\theta(z_i)
-\]
+This is exactly why the math becomes implementable.
 
 ---
 
-Step 3:
+# 20. The Most Important Takeaway
 
-Train discriminator.
+Generative modeling can be summarized as:
 
----
+1. Start from simple noise.
+2. Push it through a neural network.
+3. Obtain a model distribution.
+4. Compare the model distribution to the true data distribution.
+5. Update the parameters until the two distributions become close.
 
-Step 4:
-
-Freeze discriminator.
-
-Train generator.
-
----
-
-Step 5:
-
-Repeat.
-
----
-
-# 23. What Happens During Training?
-
-Initially:
-
-Generated samples are junk.
-
-Random blobs.
-
-Noise.
-
----
-
-As divergence decreases:
-
-Generated samples become increasingly realistic.
-
-Eventually:
-
-\[
-P_\theta
-\approx
-P_X
-\]
-
-and generated samples resemble real data.
-
----
-
-# 24. The Most Important Takeaway
-
-Generative Modeling can be viewed as:
-
-1. Start with noise
-
-\[
-z \sim N(0,1)
-\]
-
-2. Pass through a neural network
-
-\[
-G_\theta
-\]
-
-3. Obtain samples
-
-\[
-x \sim P_\theta
-\]
-
-4. Measure divergence
-
-\[
-D(P_X,P_\theta)
-\]
-
-5. Update parameters
-
-\[
-\theta
-\]
-
-6. Repeat until
-
-\[
-P_\theta \approx P_X
-\]
+That is the core idea behind GANs.
 
 ---
 
 # Final Mental Model
 
-Generative AI is fundamentally:
+A GAN is best understood as a **distribution matching machine**.
 
-> Learning a transformation that converts simple noise into samples from a complex real-world distribution.
+- The generator transforms noise into samples.
+- The discriminator estimates how different those samples are from real data.
+- The learning process alternates between the two until the generated distribution resembles the real distribution.
 
-GANs achieve this through:
-
-- F-Divergence Minimization
-- Variational Optimization
-- Adversarial Training
-- Saddle Point Optimization
-
-Everything else is implementation detail.
+The full theory comes from **F-divergence**, **variational optimization**, and **saddle point training**.
