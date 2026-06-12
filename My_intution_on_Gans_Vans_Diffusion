@@ -13,3 +13,61 @@ GANs do this using adversarial optimization.
 VAEs do this using latent-variable inference.
 
 Diffusion models do this using denoising.
+
+
+Part 1: Recap of F-Divergence (Quick Review)
+
+Goal: Learn Pθ≈PX
+Law of Large Numbers
+Expectations from samples
+Variational form of F-divergence
+Convex conjugates
+Why supremum appears
+Why equality becomes inequality
+
+
+Part 2: Sampling from Pθ
+	​
+Uniform distribution
+Random number generators
+Box-Muller intuition
+Neural network as a deterministic transformation
+z∼N(0,I)
+x=Gθ(z)
+Neural networks as distribution transformers
+Why changing θ changes Pθ
+This is one of the most important conceptual sections of the lecture.
+
+Part 3: Variational Divergence Minimization (VDM)
+
+Representing T(x) using another neural network
+
+Critic network
+Generator network
+Two optimization problems:
+
+          w max
+            and
+          θmin
+
+Saddle point formulation
+
+Part 4: 
+
+Derivation of GANs
+How GANs emerge from VDM
+Jensen-Shannon divergence choice
+Why GAN objective looks the way it does
+Generator vs Discriminator
+Adversarial optimization
+
+Part 5: GAN Training
+
+Real samples
+Generated samples
+Discriminator update
+Generator update
+Backpropagation flow
+Alternating optimization
+
+Part 6: Classifier Interpretation of GANs
