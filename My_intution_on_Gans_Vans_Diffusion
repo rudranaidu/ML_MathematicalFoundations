@@ -14,7 +14,6 @@ VAEs do this using latent-variable inference.
 
 Diffusion models do this using denoising.
 
-
 Part 1: Recap of F-Divergence (Quick Review)
 
 Goal: Learn Pθ≈PX
@@ -25,6 +24,8 @@ Convex conjugates
 Why supremum appears
 Why equality becomes inequality
 
+In ML mindset divergence is not "distance between probability formulas" but rather:
+How much evidence can the best learned model extract to prove these two distributions are different?
 
 Part 2: Sampling from Pθ
 	​
