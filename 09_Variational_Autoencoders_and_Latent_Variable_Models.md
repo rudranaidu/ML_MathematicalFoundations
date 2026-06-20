@@ -85,7 +85,7 @@ So the latent variable is not just a mathematical trick. It helps us represent s
 
 ---
 
-# 5. Prathosh's Reasoning Chain
+# 5 Reasoning Chain
 
 The lecture builds the idea step by step:
 
