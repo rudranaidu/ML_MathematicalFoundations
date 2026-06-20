@@ -1,113 +1,83 @@
-# 10_ELBO_Optimization_and_Expectation_Maximization
+Based on Prof. Prathosh A.P's lecture on Generative AI Principles and Applications.
 
-> Core Theme:
->
-> **How do we learn a latent variable model?**
->
-> The answer is:
->
-> **Maximize the Evidence Lower Bound (ELBO).**
+Core Theme:
 
----
+How do we learn a latent variable model?
 
-# 1. Where We Are in the Story
+The answer is:
+
+Maximize the Evidence Lower Bound (ELBO).
+
+1. Where We Are in the Story
 
 In the previous note we introduced latent variable models.
 
 A latent variable model assumes:
-
-$$
-P_\theta(x)
-===========
 
 \int P_\theta(x,z),dz
 $$
 
 where:
 
-* (x) = observed variable
-* (z) = hidden (latent) variable
+(x) = observed variable
+(z) = hidden (latent) variable
 
----
-
-The objective remains unchanged.
-
-We want:
+The objective remains unchanged:
 
 $$
-P_\theta
-\approx
-P_X
+P_\theta \approx P_X
 $$
 
 where:
 
-* (P_X) = true data distribution
-* (P_\theta) = model distribution
-
----
-
-# 2. Intuition First
+(P_X) = true data distribution
+(P_\theta) = model distribution
+2. Intuition First
 
 Imagine you are a detective.
 
 You observe:
 
-```text
 Evidence (X)
-```
 
 but the true cause:
 
-```text
 Hidden Cause (Z)
-```
 
 is invisible.
 
----
-
 Examples:
 
-| Observed Data X      | Hidden Variable Z   |
-| -------------------- | ------------------- |
-| Face Image           | Pose, Age, Lighting |
-| Customer Purchases   | Customer Type       |
-| Speech Signal        | Phoneme Sequence    |
-| Medical Measurements | Disease Category    |
-
----
+Observed Data X	Hidden Variable Z
+Face Image	Pose, Age, Lighting
+Customer Purchases	Customer Type
+Speech Signal	Phoneme Sequence
+Medical Measurements	Disease Category
 
 The challenge:
 
 We must learn:
 
-1. Model parameters (\theta)
-2. Hidden causes (Z)
+Model parameters (\theta)
+Hidden causes (Z)
 
 simultaneously.
 
----
-
-# 3. Real World Example
+3. Real World Example
 
 Suppose a hospital collects:
 
-```text
 Temperature
 Blood Pressure
 Heart Rate
-```
 
 for thousands of patients.
 
 But patients secretly belong to:
 
-```text
 Healthy
 Mild Infection
 Severe Infection
-```
 
 Nobody tells us these categories.
 
@@ -115,93 +85,58 @@ They are latent variables.
 
 Our goal is to discover these hidden groups while learning the data distribution.
 
----
+4. From KL Divergence to Maximum Likelihood
 
-# 4. From KL Divergence to Maximum Likelihood
-
-Prathosh starts from the same objective:
-
-$$
-\theta^*
-========
+Prathosh starts from:
 
 \arg\min_\theta
 D_{KL}(P_X | P_\theta)
 $$
 
----
-
 Expanding KL divergence:
-
-$$
-D_{KL}(P_X | P_\theta)
-======================
 
 \int
 P_X(x)
 \log
 \frac{P_X(x)}
 {P_\theta(x)}
-dx
+,dx
 $$
-
----
 
 Expanding further:
 
-# $$
-
-## \int P_X(x)\log P_X(x),dx
+\int P_X(x)\log P_X(x),dx
 
 \int P_X(x)\log P_\theta(x),dx
 $$
-
----
 
 The first term does not depend on (\theta).
 
 Therefore:
 
-$$
-\theta^*
-========
-
 \arg\max_\theta
 \mathbb E_{P_X}
-[
+\left[
 \log P_\theta(x)
-]
+\right]
 $$
 
----
-
-# 5. Key Insight
+5. Key Insight
 
 Prathosh emphasizes:
 
-```text
 Minimizing KL Divergence
 =
 Maximizing Log Likelihood
-```
 
-These are the same optimization problem.
-
----
+These are mathematically equivalent.
 
 This procedure is called:
 
-# Maximum Likelihood Estimation (MLE)
-
----
-
-# 6. The New Problem
+Maximum Likelihood Estimation (MLE)
+6. The New Problem
 
 Under a latent variable model:
-
-$$
-P_\theta(x)
-===========
 
 \int
 P_\theta(x,z)
@@ -210,25 +145,19 @@ $$
 
 Therefore:
 
-$$
-\log P_\theta(x)
-================
-
 \log
+\left(
 \int
 P_\theta(x,z)
 ,dz
+\right)
 $$
 
----
-
-The logarithm is outside the integral.
+The logarithm sits outside the integral.
 
 This makes optimization difficult.
 
----
-
-# 7. Why Is It Difficult?
+7. Why Is It Difficult?
 
 We know how to estimate:
 
@@ -238,21 +167,15 @@ $$
 
 using samples.
 
-But we do not know how to estimate:
+But we do not know how to efficiently estimate:
 
 $$
 \log \mathbb E[\cdot]
 $$
 
-efficiently.
+This is the central difficulty in latent variable models.
 
----
-
-This is where the main difficulty appears.
-
----
-
-# 8. Introducing Q(z|x)
+8. Introducing Q(z|x)
 
 Prathosh introduces:
 
@@ -262,57 +185,35 @@ $$
 
 which is any probability density function over the latent variable.
 
----
-
 Think of it as:
 
-```text
 A guess about the hidden cause.
-```
 
----
+We multiply and divide by (Q(z|x)):
 
-We multiply and divide:
-
-$$
 P_\theta(x,z)
-$$
-
-by
-
-$$
-Q(z|x)
+\frac{Q(z|x)}
+{Q(z|x)}
 $$
 
 which does not change the value.
 
----
-
-# 9. Rewriting the Likelihood
+9. Rewriting the Likelihood
 
 We obtain:
 
-$$
-\log P_\theta(x)
-================
-
 \log
+\left(
 \int
 Q(z|x)
 \frac
 {P_\theta(x,z)}
 {Q(z|x)}
-dz
+,dz
+\right)
 $$
-
----
 
 Recognize:
-
-$$
-\int
-Q(z|x)f(z)dz
-============
 
 \mathbb E_{Q(z|x)}
 [f(z)]
@@ -320,22 +221,18 @@ $$
 
 Therefore:
 
-$$
-\log P_\theta(x)
-================
-
 \log
+\left(
 \mathbb E_{Q(z|x)}
 \left[
 \frac
 {P_\theta(x,z)}
 {Q(z|x)}
 \right]
+\right)
 $$
 
----
-
-# 10. Jensen's Inequality
+10. Jensen's Inequality
 
 Prathosh now uses Jensen's inequality.
 
@@ -346,8 +243,6 @@ $$
 \ge
 \mathbb E[\log X]
 $$
-
----
 
 Applying Jensen:
 
@@ -363,25 +258,17 @@ $$
 \right]
 $$
 
----
-
-# 11. Evidence Lower Bound (ELBO)
+11. Evidence Lower Bound (ELBO)
 
 The right-hand side is called:
 
-# Evidence Lower Bound
+Evidence Lower Bound
 
 or
 
-# ELBO
-
----
+ELBO
 
 We define:
-
-$$
-J_\theta(Q)
-===========
 
 \mathbb E_{Q(z|x)}
 \left[
@@ -392,8 +279,6 @@ J_\theta(Q)
 \right]
 $$
 
----
-
 Thus:
 
 $$
@@ -402,9 +287,7 @@ $$
 J_\theta(Q)
 $$
 
----
-
-# 12. Why Is It Called ELBO?
+12. Why Is It Called ELBO?
 
 The likelihood:
 
@@ -414,27 +297,18 @@ $$
 
 is also called:
 
-```text
 Evidence
-```
 
 because it measures:
 
-> How well does the model explain the observed data?
-
----
+How well does the model explain the observed data?
 
 Since we derived a lower bound on evidence:
 
-```text
 Evidence Lower Bound
 =
 ELBO
-```
-
----
-
-# 13. The Fundamental Optimization Problem
+13. The Fundamental Optimization Problem
 
 Originally:
 
@@ -443,42 +317,33 @@ $$
 \log P_\theta(x)
 $$
 
----
-
 Now:
 
-$$
-\max_{\theta,Q}
+\arg\max_{\theta,Q}
 J_\theta(Q)
 $$
-
----
 
 Notice:
 
 The ELBO depends on:
 
-1. Model parameters
+Model parameters
 
 $$
 \theta
 $$
 
-2. Variational distribution
+Variational distribution
 
 $$
 Q(z|x)
 $$
 
----
-
 Therefore:
 
 We must learn both simultaneously.
 
----
-
-# 14. Variational Latent Posterior
+14. Variational Latent Posterior
 
 Prathosh calls:
 
@@ -488,52 +353,36 @@ $$
 
 the
 
-# Variational Latent Posterior
+Variational Latent Posterior
 
 because:
 
-* It is a distribution.
-* It is optimized.
-* It belongs to a family of functions.
+It is a distribution.
+It is optimized.
+It belongs to a family of functions.
 
 Optimization over functions comes from:
 
-```text
 Variational Calculus
-```
-
----
-
-# 15. The Most Important Result
+15. The Most Important Result
 
 Every latent variable generative model solves:
 
-$$
-(\theta^*,Q^*)
-==============
-
-\arg\max
+\arg\max_{\theta,Q}
 J_\theta(Q)
 $$
 
----
-
 Prathosh explicitly states:
 
-```text
 This is the foundational problem behind
 all latent variable models.
-```
 
 Including:
 
-* Gaussian Mixture Models (GMM)
-* Variational Autoencoders (VAE)
-* Diffusion Models
-
----
-
-# 16. Example: Gaussian Mixture Model (GMM)
+Gaussian Mixture Models (GMM)
+Variational Autoencoders (VAE)
+Diffusion Models
+16. Example: Gaussian Mixture Model (GMM)
 
 Consider a latent variable:
 
@@ -547,86 +396,46 @@ $$
 Z \in {1,2,\ldots,M}
 $$
 
----
-
 Then:
-
-$$
-P_\theta(x)
-===========
 
 \sum_{j=1}^{M}
 P_\theta(z=j)
 P_\theta(x|z=j)
 $$
 
----
-
-# 17. GMM Definition
+17. GMM Definition
 
 For a GMM:
-
-$$
-P_\theta(z=j)
-=============
 
 \alpha_j
 $$
 
 and
 
-$$
-P_\theta(x|z=j)
-===============
-
 \mathcal N(x;\mu_j,\Sigma_j)
 $$
-
----
 
 Therefore:
 
-$$
-P_\theta(x)
-===========
-
 \sum_{j=1}^{M}
 \alpha_j
+,
 \mathcal N(x;\mu_j,\Sigma_j)
 $$
 
----
-
 This is why it is called:
 
-# Gaussian Mixture Model
-
----
-
-# 18. Parameters of a GMM
+Gaussian Mixture Model
+18. Parameters of a GMM
 
 We must estimate:
 
-$$
-\theta
-======
-
 {
-\alpha_j,
-\mu_j,
-\Sigma_j
-}
+\alpha_j,\mu_j,\Sigma_j
+}_{j=1}^{M}
 $$
 
-for
-
-$$
-j=1,\ldots,M
-$$
-
----
-
-Subject to:
+subject to:
 
 $$
 \alpha_j \ge 0
@@ -634,29 +443,18 @@ $$
 
 and
 
-$$
-\sum_{j=1}^{M}
-\alpha_j
-========
-
 1
 $$
 
----
-
-# 19. How Do We Optimize ELBO?
+19. How Do We Optimize ELBO?
 
 Prathosh introduces:
 
-# Expectation Maximization (EM)
-
----
+Expectation Maximization (EM)
 
 Idea:
 
 Alternate optimization.
-
----
 
 Step 1:
 
@@ -664,143 +462,92 @@ Fix (\theta)
 
 Optimize (Q)
 
----
-
 Step 2:
 
 Fix (Q)
 
 Optimize (\theta)
 
----
-
 Repeat.
 
----
-
-# 20. EM Algorithm
+20. EM Algorithm
 
 Initialize:
 
 $$
-\theta^0,
-Q^0
+\theta^{(0)},
+Q^{(0)}
 $$
 
 arbitrarily.
 
----
-
 For iteration (t):
 
-### E-Step
-
-Compute:
-
-$$
-Q^{t+1}
-=======
+E-Step
 
 \arg\max_Q
-J_{\theta^t}(Q)
+J_{\theta^{(t)}}(Q)
 $$
 
----
-
-### M-Step
-
-Compute:
-
-$$
-\theta^{t+1}
-============
+M-Step
 
 \arg\max_\theta
-J_\theta(Q^{t+1})
+J_\theta
+\left(
+Q^{(t+1)}
+\right)
 $$
-
----
 
 Repeat until convergence.
 
----
-
-# 21. Why EM Works
+21. Why EM Works
 
 Prathosh states:
 
 EM guarantees:
 
 $$
-L^{t+1}
+L^{(t+1)}
 \ge
-L^t
+L^{(t)}
 $$
-
----
 
 Meaning:
 
 Likelihood never decreases.
 
----
-
 EM may not reach the global optimum.
 
 But every iteration improves or preserves the likelihood.
 
----
-
-# 22. Solving the E-Step for GMM
+22. Solving the E-Step for GMM
 
 A beautiful result:
 
-The optimal variational distribution is:
-
-$$
-Q^*(z|x)
-========
-
 P_\theta(z|x)
 $$
 
----
-
-The exact posterior.
-
----
+The optimal variational posterior equals the exact posterior.
 
 Using Bayes rule:
 
-$$
-P_\theta(z|x)
-=============
-
-\frac
-{
+\frac{
 P_\theta(x|z)
 P_\theta(z)
-}
-{
+}{
 P_\theta(x)
 }
 $$
-
----
 
 Since all terms are known for GMM:
 
 The posterior can be computed exactly.
 
----
-
 Therefore:
 
 The E-Step becomes tractable.
 
----
-
-# 23. Solving the M-Step
+23. Solving the M-Step
 
 After obtaining:
 
@@ -816,18 +563,12 @@ $$
 
 with respect to:
 
-$$
-\theta
-======
-
 {
 \alpha_j,\mu_j,\Sigma_j
 }
 $$
 
----
-
-This is standard optimization.
+This becomes a standard optimization problem.
 
 Differentiate.
 
@@ -835,9 +576,7 @@ Set gradients to zero.
 
 Solve.
 
----
-
-# 24. Why EM Eventually Fails
+24. Why EM Eventually Fails
 
 EM works only when:
 
@@ -847,8 +586,6 @@ $$
 
 can be computed.
 
----
-
 For GMM:
 
 Yes.
@@ -857,15 +594,11 @@ For simple latent variable models:
 
 Yes.
 
----
-
-But for complex neural-network-based models:
+For neural-network-based latent variable models:
 
 Usually no.
 
----
-
-# 25. The Big Limitation
+25. The Big Limitation
 
 Suppose:
 
@@ -877,57 +610,34 @@ cannot be computed.
 
 Then:
 
-$$
-Q^*
-===
-
 P_\theta(z|x)
 $$
 
 cannot be found.
 
----
-
 Therefore:
 
-```text
 E-Step fails.
-```
-
----
 
 EM can no longer be applied.
 
----
+26. The Big Question
 
-# 26. The Big Question
+Prathosh ends with:
 
-Prathosh ends this lecture with:
-
-```text
 How do we learn latent variable models
 when Pθ(z|x) is unknown?
-```
-
----
 
 This is exactly the motivation for:
 
-# Variational Autoencoders (VAEs)
-
----
-
-# 27. Bridge to VAEs
+Variational Autoencoders (VAEs)
+27. Bridge to VAEs
 
 VAEs solve the problem by:
 
-```text
 Approximating
-Pθ(z|x)
+P_\theta(z|x)
 using neural networks.
-```
-
----
 
 Instead of computing:
 
@@ -939,19 +649,9 @@ exactly,
 
 they learn an approximation.
 
----
-
-This idea becomes the foundation of modern deep latent variable models.
-
----
-
-# Final Takeaway
+Final Takeaway
 
 Every latent variable model starts with:
-
-$$
-P_\theta(x)
-===========
 
 \int
 P_\theta(x,z)
@@ -960,31 +660,23 @@ $$
 
 and ultimately solves:
 
-$$
-(\theta^*,Q^*)
-==============
-
-\arg\max
+\arg\max_{\theta,Q}
 ELBO
 $$
 
----
-
 For simple models:
 
-* GMM
-* C-Means
+GMM
+C-Means
 
 the ELBO is optimized using:
 
-# Expectation Maximization (EM)
-
----
+Expectation Maximization (EM)
 
 For deep models:
 
-* Variational Autoencoders
-* Diffusion Models
+Variational Autoencoders
+Diffusion Models
 
 the posterior
 
@@ -995,5 +687,3 @@ $$
 is no longer tractable.
 
 This leads directly to the next topic:
-
-# Variational Autoencoders (VAE)
