@@ -257,3 +257,245 @@ J_\theta(Q)
 ```
 
 The quantity `Jθ(Q)` is called the **Evidence Lower Bound (ELBO)**.
+
+10. Why Is It Called Evidence Lower Bound?
+
+The likelihood
+
+P_\theta(x)
+
+is often called the evidence because it measures how well the model explains the observed data.
+
+Since we derived a lower bound on the log evidence, the quantity is called the Evidence Lower Bound (ELBO).
+
+\text{ELBO} = \text{Evidence Lower Bound}
+
+Intuitively:
+
+Evidence = how well the model explains the data.
+Lower Bound = a quantity that is always less than or equal to the true log-likelihood.
+
+Instead of maximizing the difficult quantity
+
+\log P_\theta(x)
+
+we maximize its lower bound.
+
+11. The Fundamental Optimization Problem
+
+Originally our objective was:
+
+\max_\theta \log P_\theta(x)
+
+After introducing the ELBO, the optimization problem becomes:
+
+(\theta^*,Q^*)
+=
+\arg\max_{\theta,Q}
+J_\theta(Q)
+
+Notice that the ELBO depends on two objects:
+
+Model parameters θ
+Variational distribution Q(z|x)
+
+Therefore both must be optimized.
+
+This is the central optimization problem behind latent-variable generative models.
+
+12. Variational Latent Posterior
+
+Prathosh refers to
+
+Q(z|x)
+
+as the variational latent posterior.
+
+Why is it called "variational"?
+
+Because:
+
+It is a probability distribution.
+It approximates the true posterior.
+It is optimized during learning.
+Optimization over functions or distributions belongs to variational calculus.
+
+Therefore:
+
+Q(z|x)
+\approx
+P_\theta(z|x)
+
+The variational distribution serves as our approximation to the true posterior.
+
+13. The Most Important Result
+
+Every latent-variable generative model ultimately solves:
+
+(\theta^*,Q^*)
+=
+\arg\max_{\theta,Q}
+J_\theta(Q)
+
+This is the foundational optimization problem behind:
+
+Gaussian Mixture Models (GMMs)
+Variational Autoencoders (VAEs)
+
+Many modern generative methods are built upon similar variational principles.
+
+14. Example: Gaussian Mixture Model (GMM)
+
+Now consider a classical latent-variable model.
+
+Let the latent variable be discrete:
+
+Z \in \{1,2,\ldots,M\}
+
+The marginal distribution becomes:
+
+P_\theta(x)
+=
+\sum_{j=1}^{M}
+P_\theta(z=j)
+P_\theta(x|z=j)
+
+For a Gaussian Mixture Model:
+
+P_\theta(z=j)=\alpha_j
+
+where:
+
+αj is the mixing coefficient of component j
+
+and
+
+P_\theta(x|z=j)
+=
+\mathcal{N}(x;\mu_j,\Sigma_j)
+
+where:
+
+μj = mean of Gaussian j
+Σj = covariance of Gaussian j
+
+Substituting into the model:
+
+P_\theta(x)
+=
+\sum_{j=1}^{M}
+\alpha_j
+\mathcal{N}(x;\mu_j,\Sigma_j)
+
+This is a weighted sum of Gaussian densities.
+
+Hence the name:
+
+Gaussian Mixture Model.
+
+15. Parameters of a GMM
+
+The parameter set is:
+
+\theta
+=
+\{
+\alpha_j,
+\mu_j,
+\Sigma_j
+\}_{j=1}^{M}
+
+The mixing coefficients must satisfy:
+
+\alpha_j \ge 0
+
+and
+
+\sum_{j=1}^{M}
+\alpha_j
+=
+1
+
+These constraints ensure that the mixing coefficients form a valid probability distribution.
+
+Therefore, learning a GMM means estimating:
+
+Mixing weights αj
+Means μj
+Covariance matrices Σj
+
+for every Gaussian component.
+
+16. Expectation Maximization (EM)
+
+Prathosh now introduces the Expectation Maximization (EM) algorithm.
+
+The key idea is simple:
+
+Instead of optimizing both Q and θ simultaneously, we alternate between them.
+
+EM repeatedly performs:
+
+Optimize Q while holding θ fixed.
+Optimize θ while holding Q fixed.
+
+This breaks a difficult optimization problem into two easier subproblems.
+
+E-Step (Expectation Step)
+
+Keep the parameters fixed:
+
+\theta^{(t)}
+
+and optimize the variational distribution:
+
+Q^{(t+1)}
+=
+\arg\max_Q
+J_{\theta^{(t)}}(Q)
+
+Interpretation:
+
+Given the current model, estimate the latent variables.
+
+In a GMM, this means computing the probability that each datapoint belongs to each Gaussian component.
+
+M-Step (Maximization Step)
+
+Keep the variational distribution fixed:
+
+Q^{(t+1)}
+
+and optimize the parameters:
+
+\theta^{(t+1)}
+=
+\arg\max_\theta
+J_\theta
+\bigl(
+Q^{(t+1)}
+\bigr)
+
+Interpretation:
+
+Given the inferred latent assignments, update the model parameters.
+
+Intuition Behind EM
+
+Think of clustering customers.
+
+E-Step
+
+Estimate:
+
+Which customer belongs to which cluster?
+
+M-Step
+
+Update:
+
+What should the cluster centers and spreads be?
+
+Then repeat until convergence.
+
+This alternating optimization is the EM algorithm.
