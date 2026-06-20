@@ -231,228 +231,172 @@ It converts an intractable optimization problem into a tractable lower bound opt
 
 ---
 
-# 9. Evidence Lower Bound (ELBO)
-
-The right-hand side is given a special name.
-
-Define:
-
-```math
-J_\theta(Q)
-=
-\mathbb{E}_{Q(z|x)}
-\left[
-\log
-\frac{P_\theta(x,z)}
-{Q(z|x)}
-\right]
-```
-
-Then:
-
-```math
-\log P_\theta(x)
-\ge
-J_\theta(Q)
-```
-
-The quantity `Jθ(Q)` is called the **Evidence Lower Bound (ELBO)**.
-
-10. Why Is It Called Evidence Lower Bound?
+# 10. Why Is It Called Evidence Lower Bound?
 
 The likelihood
 
-P_\theta(x)
+`P_\theta(x)`
 
-is often called the evidence because it measures how well the model explains the observed data.
+is often called the **evidence** because it measures how well the model explains the observed data.
 
-Since we derived a lower bound on the log evidence, the quantity is called the Evidence Lower Bound (ELBO).
+Since we derived a lower bound on the log evidence, the quantity is called the **Evidence Lower Bound (ELBO)**.
 
-\text{ELBO} = \text{Evidence Lower Bound}
+`ELBO = Evidence Lower Bound`
 
 Intuitively:
 
-Evidence = how well the model explains the data.
-Lower Bound = a quantity that is always less than or equal to the true log-likelihood.
+- Evidence = how well the model explains the observed data.
+- Lower Bound = a quantity that is guaranteed to be less than or equal to the true log-likelihood.
 
 Instead of maximizing the difficult quantity
 
-\log P_\theta(x)
+`log P_\theta(x)`
 
 we maximize its lower bound.
 
-11. The Fundamental Optimization Problem
+---
 
-Originally our objective was:
+# 11. The Fundamental Optimization Problem
 
-\max_\theta \log P_\theta(x)
+Originally, our objective was:
+
+`max_\theta log P_\theta(x)`
 
 After introducing the ELBO, the optimization problem becomes:
 
-(\theta^*,Q^*)
-=
-\arg\max_{\theta,Q}
-J_\theta(Q)
+`(\theta^*, Q^*) = \arg\max_{\theta,Q} J_\theta(Q)`
 
 Notice that the ELBO depends on two objects:
 
-Model parameters θ
-Variational distribution Q(z|x)
+1. Model parameters `\theta`
+2. Variational distribution `Q(z|x)`
 
-Therefore both must be optimized.
+Both must be optimized.
 
-This is the central optimization problem behind latent-variable generative models.
+This is the central optimization problem behind latent variable generative models.
 
-12. Variational Latent Posterior
+---
+
+# 12. Variational Latent Posterior
 
 Prathosh refers to
 
-Q(z|x)
+`Q(z|x)`
 
-as the variational latent posterior.
+as the **variational latent posterior**.
 
 Why is it called "variational"?
 
 Because:
 
-It is a probability distribution.
-It approximates the true posterior.
-It is optimized during learning.
-Optimization over functions or distributions belongs to variational calculus.
+- It is a probability distribution.
+- It approximates the true posterior.
+- It is optimized during learning.
+- Optimization over distributions belongs to variational calculus.
 
-Therefore:
+The goal is:
 
-Q(z|x)
-\approx
-P_\theta(z|x)
+`Q(z|x) \approx P_\theta(z|x)`
 
-The variational distribution serves as our approximation to the true posterior.
+The variational distribution acts as our approximation to the true posterior.
 
-13. The Most Important Result
+---
+
+# 13. The Most Important Result
 
 Every latent-variable generative model ultimately solves:
 
-(\theta^*,Q^*)
-=
-\arg\max_{\theta,Q}
-J_\theta(Q)
+`(\theta^*, Q^*) = \arg\max_{\theta,Q} J_\theta(Q)`
 
 This is the foundational optimization problem behind:
 
-Gaussian Mixture Models (GMMs)
-Variational Autoencoders (VAEs)
+- Gaussian Mixture Models (GMMs)
+- Variational Autoencoders (VAEs)
 
-Many modern generative methods are built upon similar variational principles.
+Many modern latent-variable models are built upon the same variational principle.
 
-14. Example: Gaussian Mixture Model (GMM)
+---
 
-Now consider a classical latent-variable model.
+# 14. Example: Gaussian Mixture Model (GMM)
 
 Let the latent variable be discrete:
 
-Z \in \{1,2,\ldots,M\}
+`Z \in \{1,2,\ldots,M\}`
 
-The marginal distribution becomes:
+Then the model becomes:
 
-P_\theta(x)
-=
-\sum_{j=1}^{M}
-P_\theta(z=j)
-P_\theta(x|z=j)
+`P_\theta(x) = \sum_{j=1}^{M} P_\theta(z=j)P_\theta(x|z=j)`
 
 For a Gaussian Mixture Model:
 
-P_\theta(z=j)=\alpha_j
-
-where:
-
-αj is the mixing coefficient of component j
+`P_\theta(z=j)=\alpha_j`
 
 and
 
-P_\theta(x|z=j)
-=
-\mathcal{N}(x;\mu_j,\Sigma_j)
-
-where:
-
-μj = mean of Gaussian j
-Σj = covariance of Gaussian j
+`P_\theta(x|z=j)=\mathcal{N}(x;\mu_j,\Sigma_j)`
 
 Substituting into the model:
 
-P_\theta(x)
-=
-\sum_{j=1}^{M}
-\alpha_j
-\mathcal{N}(x;\mu_j,\Sigma_j)
+`P_\theta(x)=\sum_{j=1}^{M}\alpha_j \mathcal{N}(x;\mu_j,\Sigma_j)`
 
 This is a weighted sum of Gaussian densities.
 
 Hence the name:
 
-Gaussian Mixture Model.
+**Gaussian Mixture Model.**
 
-15. Parameters of a GMM
+---
+
+# 15. Parameters of a GMM
 
 The parameter set is:
 
-\theta
-=
-\{
-\alpha_j,
-\mu_j,
-\Sigma_j
-\}_{j=1}^{M}
+`\theta = \{\alpha_j,\mu_j,\Sigma_j\}_{j=1}^{M}`
 
 The mixing coefficients must satisfy:
 
-\alpha_j \ge 0
+`\alpha_j \ge 0`
 
 and
 
-\sum_{j=1}^{M}
-\alpha_j
-=
-1
+`\sum_{j=1}^{M}\alpha_j = 1`
 
 These constraints ensure that the mixing coefficients form a valid probability distribution.
 
 Therefore, learning a GMM means estimating:
 
-Mixing weights αj
-Means μj
-Covariance matrices Σj
+- Mixing weights `\alpha_j`
+- Means `\mu_j`
+- Covariance matrices `\Sigma_j`
 
 for every Gaussian component.
 
-16. Expectation Maximization (EM)
+---
 
-Prathosh now introduces the Expectation Maximization (EM) algorithm.
+# 16. Expectation Maximization (EM)
+
+Prathosh now introduces the **Expectation Maximization (EM)** algorithm.
 
 The key idea is simple:
 
-Instead of optimizing both Q and θ simultaneously, we alternate between them.
+Instead of optimizing both `Q` and `\theta` simultaneously, we alternate between them.
 
 EM repeatedly performs:
 
-Optimize Q while holding θ fixed.
-Optimize θ while holding Q fixed.
+1. Optimize `Q` while keeping `\theta` fixed.
+2. Optimize `\theta` while keeping `Q` fixed.
 
-This breaks a difficult optimization problem into two easier subproblems.
+This converts one difficult optimization problem into two simpler optimization problems.
 
-E-Step (Expectation Step)
+## E-Step (Expectation Step)
 
 Keep the parameters fixed:
 
-\theta^{(t)}
+`\theta^{(t)}`
 
 and optimize the variational distribution:
 
-Q^{(t+1)}
-=
-\arg\max_Q
-J_{\theta^{(t)}}(Q)
+`Q^{(t+1)} = \arg\max_Q J_{\theta^{(t)}}(Q)`
 
 Interpretation:
 
@@ -460,41 +404,35 @@ Given the current model, estimate the latent variables.
 
 In a GMM, this means computing the probability that each datapoint belongs to each Gaussian component.
 
-M-Step (Maximization Step)
+## M-Step (Maximization Step)
 
 Keep the variational distribution fixed:
 
-Q^{(t+1)}
+`Q^{(t+1)}`
 
 and optimize the parameters:
 
-\theta^{(t+1)}
-=
-\arg\max_\theta
-J_\theta
-\bigl(
-Q^{(t+1)}
-\bigr)
+`\theta^{(t+1)} = \arg\max_\theta J_\theta(Q^{(t+1)})`
 
 Interpretation:
 
 Given the inferred latent assignments, update the model parameters.
 
-Intuition Behind EM
+## Intuition Behind EM
 
 Think of clustering customers.
 
-E-Step
+### E-Step
 
 Estimate:
 
-Which customer belongs to which cluster?
+"Which customer belongs to which cluster?"
 
-M-Step
+### M-Step
 
 Update:
 
-What should the cluster centers and spreads be?
+"What should the cluster centers and cluster spreads be?"
 
 Then repeat until convergence.
 
