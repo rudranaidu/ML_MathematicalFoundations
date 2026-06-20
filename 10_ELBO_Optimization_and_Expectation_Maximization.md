@@ -438,3 +438,245 @@ Then repeat until convergence.
 
 This alternating optimization is the EM algorithm.
 
+# 17. EM in Words
+
+The EM algorithm works as follows:
+
+1. Start with an initial guess for θ.
+2. Infer the latent variables using the E-Step.
+3. Update the model parameters using the M-Step.
+4. Repeat until convergence.
+
+This alternating optimization procedure is called **Expectation Maximization (EM)**.
+
+---
+
+# 18. Why EM Works
+
+Prathosh states an important property of EM.
+
+The likelihood never decreases.
+
+If the likelihood at iteration t is denoted by:
+
+L(t)
+
+then EM guarantees:
+
+L(t+1) ≥ L(t)
+
+Every iteration either:
+
+* Improves the likelihood, or
+* Leaves it unchanged.
+
+This property is called **monotonic improvement**.
+
+Important:
+
+EM does **not** guarantee finding the global optimum.
+
+Instead, it guarantees convergence to a local optimum or stationary point.
+
+Think of EM as climbing a hill in the dark:
+
+* Every step goes uphill.
+* You never go downhill.
+* You may reach the top of a nearby hill.
+* You are not guaranteed to reach the highest hill in the entire landscape.
+
+---
+
+# 19. Why EM Works for GMMs
+
+EM works particularly well for Gaussian Mixture Models because the posterior distribution can be computed analytically.
+
+The posterior is:
+
+Pθ(z|x)
+
+Using Bayes' rule:
+
+Pθ(z|x) = Pθ(x|z) Pθ(z) / Pθ(x)
+
+For a GMM:
+
+* Pθ(x|z) is known.
+* Pθ(z) is known.
+* Pθ(x) can be computed exactly.
+
+Therefore the posterior is tractable.
+
+This makes the E-Step feasible.
+
+In practice, the E-Step computes:
+
+"How likely is it that datapoint x came from Gaussian component j?"
+
+These probabilities are often called **responsibilities**.
+
+---
+
+# 20. Solving the M-Step
+
+Once the posterior has been computed, we maximize the ELBO with respect to:
+
+θ = {αj, μj, Σj}
+
+This is a standard optimization problem.
+
+The procedure is:
+
+1. Differentiate the ELBO.
+2. Set derivatives equal to zero.
+3. Solve for the optimal parameters.
+
+For Gaussian Mixture Models, this produces closed-form update equations.
+
+This is one reason GMMs are considered mathematically elegant.
+
+Unlike deep neural networks, no gradient descent is required.
+
+The optimal parameter updates can be written down directly.
+
+---
+
+# 21. Why EM Eventually Fails
+
+EM requires the posterior:
+
+Pθ(z|x)
+
+to be computable.
+
+This is true for simple models such as:
+
+* Gaussian Mixture Models
+* Hidden Markov Models
+* Other classical probabilistic models
+
+However, modern latent-variable models often use deep neural networks.
+
+In these models:
+
+Pθ(z|x)
+
+is typically intractable.
+
+The posterior cannot be computed exactly.
+
+As a result, the E-Step becomes impossible to perform analytically.
+
+This is the fundamental limitation of classical EM.
+
+---
+
+# 22. The Big Question
+
+Prathosh ends with the following question:
+
+> How do we learn latent-variable models when Pθ(z|x) is unknown or intractable?
+
+This question motivates the development of Variational Autoencoders.
+
+The challenge is:
+
+* We still want latent variables.
+* We still want generative models.
+* We still want to maximize the ELBO.
+
+But we can no longer compute the exact posterior.
+
+So we need a new idea.
+
+---
+
+# 23. Bridge to Variational Autoencoders (VAEs)
+
+Variational Autoencoders solve the intractable posterior problem by introducing a neural approximation.
+
+Instead of computing:
+
+Pθ(z|x)
+
+exactly, they learn an approximation:
+
+Qφ(z|x) ≈ Pθ(z|x)
+
+where:
+
+* φ are neural-network parameters.
+* Qφ(z|x) is called the encoder.
+* Pθ(x|z) is called the decoder.
+
+The encoder learns to approximate the true posterior.
+
+The decoder learns to generate data from latent variables.
+
+This transforms latent-variable modeling into a deep learning problem.
+
+Instead of solving the E-Step analytically, we train a neural network to perform approximate inference.
+
+This idea forms the foundation of modern deep generative models.
+
+---
+
+# Final Takeaway
+
+A latent-variable model starts from:
+
+Pθ(x) = ∫ Pθ(x,z) dz
+
+and learns by maximizing the ELBO:
+
+(θ*, Q*) = argmax(θ,Q) Jθ(Q)
+
+The ELBO provides a tractable objective that can be optimized even when the exact likelihood is difficult to compute.
+
+For simple models such as Gaussian Mixture Models:
+
+* The posterior is tractable.
+* EM can optimize the ELBO directly.
+
+For deep latent-variable models:
+
+* The posterior is intractable.
+* Exact EM no longer works.
+* Neural approximations are required.
+
+This motivates the development of Variational Autoencoders.
+
+---
+
+# Chapter Summary
+
+The key ideas from this chapter are:
+
+1. Minimizing KL divergence is equivalent to maximizing likelihood.
+
+2. Latent-variable models introduce hidden variables z.
+
+3. Direct likelihood optimization becomes difficult because of the latent variables.
+
+4. Introducing Q(z|x) allows us to derive the ELBO.
+
+5. ELBO is a lower bound on the log-likelihood.
+
+6. Learning becomes:
+
+   (θ*, Q*) = argmax(θ,Q) Jθ(Q)
+
+7. EM alternates between:
+
+   * E-Step: optimize Q
+   * M-Step: optimize θ
+
+8. EM works when the posterior is tractable.
+
+9. EM fails when the posterior is intractable.
+
+10. Variational Autoencoders solve this problem using neural-network approximations of the posterior.
+
+This chapter marks the transition from **classical latent-variable models** to **modern deep generative models**.
+
+
