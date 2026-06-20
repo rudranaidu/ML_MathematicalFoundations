@@ -235,22 +235,22 @@ It converts an intractable optimization problem into a tractable lower bound opt
 
 The likelihood
 
-`P_\theta(x)`
+Pθ(x)
 
 is often called the **evidence** because it measures how well the model explains the observed data.
 
 Since we derived a lower bound on the log evidence, the quantity is called the **Evidence Lower Bound (ELBO)**.
 
-`ELBO = Evidence Lower Bound`
+ELBO = Evidence Lower Bound
 
 Intuitively:
 
-- Evidence = how well the model explains the observed data.
-- Lower Bound = a quantity that is guaranteed to be less than or equal to the true log-likelihood.
+* Evidence = how well the model explains the observed data.
+* Lower Bound = a quantity that is guaranteed to be less than or equal to the true log-likelihood.
 
 Instead of maximizing the difficult quantity
 
-`log P_\theta(x)`
+log Pθ(x)
 
 we maximize its lower bound.
 
@@ -260,16 +260,16 @@ we maximize its lower bound.
 
 Originally, our objective was:
 
-`max_\theta log P_\theta(x)`
+maxθ log Pθ(x)
 
 After introducing the ELBO, the optimization problem becomes:
 
-`(\theta^*, Q^*) = \arg\max_{\theta,Q} J_\theta(Q)`
+(θ*, Q*) = argmax(θ,Q) Jθ(Q)
 
 Notice that the ELBO depends on two objects:
 
-1. Model parameters `\theta`
-2. Variational distribution `Q(z|x)`
+1. Model parameters θ
+2. Variational distribution Q(z|x)
 
 Both must be optimized.
 
@@ -281,7 +281,7 @@ This is the central optimization problem behind latent variable generative model
 
 Prathosh refers to
 
-`Q(z|x)`
+Q(z|x)
 
 as the **variational latent posterior**.
 
@@ -289,14 +289,14 @@ Why is it called "variational"?
 
 Because:
 
-- It is a probability distribution.
-- It approximates the true posterior.
-- It is optimized during learning.
-- Optimization over distributions belongs to variational calculus.
+* It is a probability distribution.
+* It approximates the true posterior.
+* It is optimized during learning.
+* Optimization over distributions belongs to variational calculus.
 
 The goal is:
 
-`Q(z|x) \approx P_\theta(z|x)`
+Q(z|x) ≈ Pθ(z|x)
 
 The variational distribution acts as our approximation to the true posterior.
 
@@ -306,12 +306,12 @@ The variational distribution acts as our approximation to the true posterior.
 
 Every latent-variable generative model ultimately solves:
 
-`(\theta^*, Q^*) = \arg\max_{\theta,Q} J_\theta(Q)`
+(θ*, Q*) = argmax(θ,Q) Jθ(Q)
 
 This is the foundational optimization problem behind:
 
-- Gaussian Mixture Models (GMMs)
-- Variational Autoencoders (VAEs)
+* Gaussian Mixture Models (GMMs)
+* Variational Autoencoders (VAEs)
 
 Many modern latent-variable models are built upon the same variational principle.
 
@@ -321,23 +321,23 @@ Many modern latent-variable models are built upon the same variational principle
 
 Let the latent variable be discrete:
 
-`Z \in \{1,2,\ldots,M\}`
+Z ∈ {1, 2, ..., M}
 
 Then the model becomes:
 
-`P_\theta(x) = \sum_{j=1}^{M} P_\theta(z=j)P_\theta(x|z=j)`
+Pθ(x) = Σ[j=1→M] Pθ(z=j) Pθ(x|z=j)
 
 For a Gaussian Mixture Model:
 
-`P_\theta(z=j)=\alpha_j`
+Pθ(z=j) = αj
 
 and
 
-`P_\theta(x|z=j)=\mathcal{N}(x;\mu_j,\Sigma_j)`
+Pθ(x|z=j) = N(x; μj, Σj)
 
 Substituting into the model:
 
-`P_\theta(x)=\sum_{j=1}^{M}\alpha_j \mathcal{N}(x;\mu_j,\Sigma_j)`
+Pθ(x) = Σ[j=1→M] αj N(x; μj, Σj)
 
 This is a weighted sum of Gaussian densities.
 
@@ -351,23 +351,23 @@ Hence the name:
 
 The parameter set is:
 
-`\theta = \{\alpha_j,\mu_j,\Sigma_j\}_{j=1}^{M}`
+θ = {αj, μj, Σj} for j = 1,...,M
 
 The mixing coefficients must satisfy:
 
-`\alpha_j \ge 0`
+αj ≥ 0
 
 and
 
-`\sum_{j=1}^{M}\alpha_j = 1`
+Σ[j=1→M] αj = 1
 
 These constraints ensure that the mixing coefficients form a valid probability distribution.
 
 Therefore, learning a GMM means estimating:
 
-- Mixing weights `\alpha_j`
-- Means `\mu_j`
-- Covariance matrices `\Sigma_j`
+* Mixing weights αj
+* Means μj
+* Covariance matrices Σj
 
 for every Gaussian component.
 
@@ -379,12 +379,12 @@ Prathosh now introduces the **Expectation Maximization (EM)** algorithm.
 
 The key idea is simple:
 
-Instead of optimizing both `Q` and `\theta` simultaneously, we alternate between them.
+Instead of optimizing both Q and θ simultaneously, we alternate between them.
 
 EM repeatedly performs:
 
-1. Optimize `Q` while keeping `\theta` fixed.
-2. Optimize `\theta` while keeping `Q` fixed.
+1. Optimize Q while keeping θ fixed.
+2. Optimize θ while keeping Q fixed.
 
 This converts one difficult optimization problem into two simpler optimization problems.
 
@@ -392,11 +392,11 @@ This converts one difficult optimization problem into two simpler optimization p
 
 Keep the parameters fixed:
 
-`\theta^{(t)}`
+θ(t)
 
 and optimize the variational distribution:
 
-`Q^{(t+1)} = \arg\max_Q J_{\theta^{(t)}}(Q)`
+Q(t+1) = argmaxQ Jθ(t)(Q)
 
 Interpretation:
 
@@ -408,11 +408,11 @@ In a GMM, this means computing the probability that each datapoint belongs to ea
 
 Keep the variational distribution fixed:
 
-`Q^{(t+1)}`
+Q(t+1)
 
 and optimize the parameters:
 
-`\theta^{(t+1)} = \arg\max_\theta J_\theta(Q^{(t+1)})`
+θ(t+1) = argmaxθ Jθ(Q(t+1))
 
 Interpretation:
 
@@ -437,3 +437,4 @@ Update:
 Then repeat until convergence.
 
 This alternating optimization is the EM algorithm.
+
