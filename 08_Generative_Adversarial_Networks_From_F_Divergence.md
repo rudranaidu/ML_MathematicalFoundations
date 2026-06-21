@@ -134,7 +134,7 @@ Machine learning uses exactly the same idea.
 
 ---
 
-#5. Variational Form of F-Divergence
+# 5. Variational Form of F-Divergence**
 
 Using convex conjugates, the F-divergence can be rewritten as:
 
