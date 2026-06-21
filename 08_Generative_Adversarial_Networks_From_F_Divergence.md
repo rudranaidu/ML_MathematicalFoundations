@@ -227,21 +227,6 @@ D_f
 \sup(\cdots)
 ```
 
-instead of exact equality.
----
-
-## Analogy
-
-Suppose you want the world's best singer.
-
-But you only search inside one city.
-
-You may find the best singer in that city, not the best singer in the world.
-
-Therefore your answer becomes a lower bound.
-
----
-
 # 9. The Missing Piece
 
 So far we have:
