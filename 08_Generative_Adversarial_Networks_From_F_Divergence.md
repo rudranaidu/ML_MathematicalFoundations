@@ -191,23 +191,43 @@ This is where the supremum comes from.
 
 Ideally:
 
-$$
+```math
 D_f
-===
-
+=
 \sup(\cdots)
-$$
+```
 
 In practice:
 
-$$
+```math
 D_f
 \ge
 \sup(\cdots)
-$$
+```
 
 because we only search over a restricted family of functions.
 
+### Intuition
+
+Suppose you want the world's best singer.
+
+But you are only allowed to search inside Bangalore.
+
+The best singer in Bangalore may not be the best singer in the world.
+
+Therefore your answer becomes a lower bound.
+
+The same thing happens here.
+
+The supremum is taken over a restricted class of functions rather than all possible functions. Therefore we obtain a lower bound:
+
+```math
+D_f
+\ge
+\sup(\cdots)
+```
+
+instead of exact equality.
 ---
 
 ## Analogy
