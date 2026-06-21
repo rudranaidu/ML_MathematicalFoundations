@@ -134,29 +134,28 @@ Machine learning uses exactly the same idea.
 
 ---
 
-# 5. Variational Representation of F-Divergence
-
-## Variational Form of F-Divergence
+5. ## Variational Form of F-Divergence
 
 Using convex conjugates, the F-divergence can be rewritten as:
 
-$$
+```math
 D_f(P_X,P_\theta)
 =
 \sup_T
-\Big(
+\left(
 \mathbb{E}_{P_X}[T(x)]
 -
 \mathbb{E}_{P_\theta}[F^*(T(x))]
-\Big)
-$$
+\right)
+```
 
-This is powerful because:
+where:
 
-1. It removes the need to know the density functions explicitly.
-2. It expresses the divergence in terms of expectations.
-3. Expectations can be approximated using sample averages.
-4. The optimization over \(T\) becomes the basis of adversarial training and GANs.---
+- \(F^*\) is the convex conjugate of \(F\)
+- \(T(x)\) is an auxiliary function being optimized
+- \(\sup\) denotes the supremum (maximum)
+
+This equation is the foundation of **Variational Divergence Minimization (VDM)**.
 
 # 6. Why "Variational"?
 
