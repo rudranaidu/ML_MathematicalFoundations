@@ -79,7 +79,7 @@ The latent variable is:
 - unobserved
 - not directly given in the dataset
 
-But Prathosh emphasizes that it is still useful because it can make learning easier and can reveal information about the data.
+But it is still useful because it can make learning easier and can reveal information about the data.
 
 So the latent variable is not just a mathematical trick. It helps us represent structure inside the data.
 
