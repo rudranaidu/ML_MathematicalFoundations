@@ -580,26 +580,66 @@ $$
 ---
 
 # 21. Intuition Behind ELBO
+## Intuition Behind the ELBO
 
-The ELBO is a compromise between two things:
+The ELBO is a compromise between two competing goals.
 
-1. **Explaining the data well**
-   $$
-   \log p_\theta(x,z)
-   $$
+### 1. Explain the observed data well
 
-2. **Using a reasonable latent posterior**
-   $$
-   Q(z\mid x)
-   $$
+The model wants to assign a **high probability** to the observed data together with its latent variables.
 
-You can think of it as:
+Mathematically, this is represented by:
 
-- the model tries to explain the observed sample using hidden causes
-- the variational distribution tries to guess those hidden causes
-- the lower bound measures how well the explanation works
+**log Pθ(X, Z)**
+
+A larger value means the model provides a better explanation of how the observed sample **X** and the hidden variable **Z** could have occurred together.
 
 ---
+
+### 2. Find a good approximation to the latent posterior
+
+The model also wants the variational distribution
+
+**Q(Z|X)**
+
+to be a good approximation of the true posterior
+
+**Pθ(Z|X)**.
+
+In other words, the guessed hidden causes should be as close as possible to the actual hidden causes.
+
+---
+
+## Putting Both Ideas Together
+
+The ELBO balances these two objectives:
+
+* **Explain the observed data well** using the generative model **Pθ(X, Z)**.
+* **Infer the hidden variables accurately** using the variational distribution **Q(Z|X)**.
+
+Both objectives are optimized simultaneously.
+
+---
+
+## An Intuitive Way to Think About It
+
+Imagine a detective solving a mystery.
+
+* The **observed evidence** is **X**.
+* The **hidden cause** is **Z**.
+* The **generative model Pθ(X, Z)** tries to explain how that hidden cause could have produced the observed evidence.
+* The **variational distribution Q(Z|X)** tries to guess what the hidden cause actually was.
+
+The ELBO measures how well these two pieces work together.
+
+A higher ELBO means:
+
+* The model explains the observed data more convincingly.
+* The inferred hidden variables are more accurate.
+* The overall latent-variable model becomes better.
+
+This is why maximizing the ELBO is equivalent to learning both a good **generative model** and a good **approximate inference model** at the same time.
+
 
 # 22. Why This Is the Foundation for VAEs
 
