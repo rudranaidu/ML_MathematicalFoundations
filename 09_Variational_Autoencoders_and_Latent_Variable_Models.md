@@ -142,7 +142,7 @@ $$
 
 This means the observed data distribution is obtained by marginalizing out the hidden variable.
 
-Prathosh also notes that for each data point `x_i`, we can think of a corresponding latent variable `z_i`.
+We can also observe that for each data point `x_i`, we can think of a corresponding latent variable `z_i`.
 
 That is the conceptual reason latent-variable models can capture per-example hidden structure.
 
