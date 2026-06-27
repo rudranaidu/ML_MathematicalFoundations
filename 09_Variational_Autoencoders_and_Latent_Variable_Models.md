@@ -306,9 +306,9 @@ Instead, we introduce an approximate latent posterior \(Q(Z\mid X)\), which acts
 
 ---
 
-# 16. Prathosh's Reasoning Chain
+# 16. Reasoning Chain
 
-Prathosh builds the derivation in a very systematic way:
+Now we build the derivation in a very systematic way:
 
 1. We are given data \(D\) sampled i.i.d. from an unknown distribution \(P_X\).
 2. We assume a latent-variable model with joint distribution \(p_\theta(x,z)\).
@@ -698,11 +698,3 @@ That lower bound is called the **Evidence Lower Bound (ELBO)**.
 ## Why it matters
 
 It gives a tractable objective for learning latent-variable models.
-
----
-
-# 24. One-Line Summary
-
-ELBO is the practical replacement for an intractable latent-variable likelihood:
-
-> Instead of maximizing \(\log p_\theta(x)\) directly, we maximize a lower bound obtained by introducing a variational posterior \(Q(z\mid x)\) and applying Jensen's inequality.
