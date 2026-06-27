@@ -116,7 +116,7 @@ $$
 P_\theta \approx P_X
 $$
 
-Prathosh first frames this as minimizing KL divergence:
+We first frames this as minimizing KL divergence:
 
 $$
 \min_\theta \; D_{KL}(P_X \| P_\theta)
@@ -195,16 +195,14 @@ This is the direction that later leads naturally to autoencoders and VAEs.
 
 # 10. Why Latent Variable Models Are Useful
 
-Prathosh highlights two major uses:
+ Two major uses:
 
 ## 1. Clustering / structure discovery
 When `Z` is discrete, the model groups the data into categories.
 
 ## 2. Generative modeling
 Most latent-variable models can also be used to generate new samples.
-
 This is especially important in this course, because the main goal is generative modeling.
-
 So in later lectures, latent-variable models will mainly be treated as **generative models**.
 
 ---
@@ -252,9 +250,6 @@ That is the core idea behind latent-variable generative modeling.
 
 # Part 2: Evidence Lower Bound (ELBO)
 
-> Based on Prathosh A.P.'s lecture on the general principle of learning latent variable models.
-
----
 
 # 14. Intuition First
 
