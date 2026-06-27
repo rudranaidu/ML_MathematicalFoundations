@@ -22,7 +22,7 @@ For example, an image of a face may depend on hidden factors like:
 
 We do not observe these factors directly, but they help explain the data.
 
-That hidden information is what Prathosh calls the **latent variable**.
+That hidden information is what we calls the **latent variable**.
 
 ---
 
@@ -53,7 +53,7 @@ meaning the hidden variable explains how the observed data arises.
 
 # 3. What Is a Latent Variable Model?
 
-Prathosh defines a latent variable model as a model where the data distribution is the **marginal** of a joint distribution over `X` and `Z`:
+ A latent variable model as a model where the data distribution is the **marginal** of a joint distribution over `X` and `Z`:
 
 $$
 P_\theta(X) = \int P_\theta(X,Z)\, dZ
