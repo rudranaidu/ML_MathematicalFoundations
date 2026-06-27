@@ -353,70 +353,68 @@ $$
 
 Now introduce any density \(Q(z\mid x)\) over the latent variable \(Z\), and multiply and divide by it:
 
-$$
-\mathcal{L}(\theta)
-=
-\log \int Q(z\mid x)\frac{p_\theta(x,z)}{Q(z\mid x)}\,dz
-$$
+### Rewriting the Likelihood
 
-This is now the expectation of a function under \(Q(z\mid x)\):
+Recall that
 
-$$
-\mathcal{L}(\theta)
-=
-\log \mathbb{E}_{Q(z\mid x)}
-\left[
-\frac{p_\theta(x,z)}{Q(z\mid x)}
-\right]
-$$
+Pθ(x) = ∫ Pθ(x,z) dz
 
-Now apply Jensen's inequality. Since \(\log\) is concave:
+Taking the logarithm gives:
 
-$$
-\log \mathbb{E}[f(z)] \ge \mathbb{E}[\log f(z)]
-$$
+L(θ) = log Pθ(x)
 
-Therefore:
+Introduce an auxiliary distribution Q(z|x) by multiplying and dividing inside the integral:
 
-$$
-\mathcal{L}(\theta)
-\ge
-\mathbb{E}_{Q(z\mid x)}
-\left[
-\log \frac{p_\theta(x,z)}{Q(z\mid x)}
-\right]
-$$
+L(θ) = log ∫ Q(z|x) · [Pθ(x,z) / Q(z|x)] dz
 
-Expanding the log:
+Notice that the integral is now an expectation with respect to Q(z|x):
 
-$$
-\mathcal{L}(\theta)
-\ge
-\mathbb{E}_{Q(z\mid x)}[\log p_\theta(x,z)]
--
-\mathbb{E}_{Q(z\mid x)}[\log Q(z\mid x)]
-$$
+L(θ) = log EQ(z|x) [ Pθ(x,z) / Q(z|x) ]
 
-This lower bound is the **ELBO**.
+Now apply **Jensen's Inequality**.
 
-We can denote it as:
+Since the logarithm is a **concave** function,
 
-$$
-J_\theta(Q)
-=
-\mathbb{E}_{Q(z\mid x)}
-\left[
-\log \frac{p_\theta(x,z)}{Q(z\mid x)}
-\right]
-$$
+log(E[f(z)]) ≥ E[log(f(z))]
 
-So:
+Applying Jensen's inequality gives:
 
-$$
-\log p_\theta(x) \ge J_\theta(Q)
-$$
+L(θ) ≥ EQ(z|x) [ log(Pθ(x,z) / Q(z|x)) ]
 
----
+Using the logarithm identity
+
+log(a/b) = log(a) − log(b)
+
+we obtain
+
+L(θ) ≥ EQ(z|x)[log Pθ(x,z)] − EQ(z|x)[log Q(z|x)]
+
+This expression is called the **Evidence Lower Bound (ELBO)**.
+
+We define
+
+Jθ(Q) = EQ(z|x) [ log(Pθ(x,z) / Q(z|x)) ]
+
+Therefore,
+
+log Pθ(x) ≥ Jθ(Q)
+
+This is the fundamental optimization objective used in latent-variable generative models.
+
+Instead of maximizing the difficult quantity
+
+log Pθ(x),
+
+we maximize its lower bound
+
+Jθ(Q).
+
+This idea is the foundation of:
+
+* Expectation Maximization (EM)
+* Variational Inference
+* Variational Autoencoders (VAEs)
+
 
 # 18. Why This Bound Matters
 
