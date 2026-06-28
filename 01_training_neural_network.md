@@ -138,8 +138,7 @@ Hyperparameters are chosen by the human before or during training.
 
 | Hyperparameter | Meaning | Chosen by human? |
 | --- | --- | --- |
-| Learning rate | Learning rate is the correction size the model uses after each mistake: if it is too small, the model learns very slowly; if it is too large, the model overcorrects and may miss the best solution, so we choose a balanced value that helps the model improve steadily.
-| Yes |
+| Learning rate | Learning rate is the correction size the model uses after each mistake: if it is too small, the model learns very slowly; if it is too large, the model overcorrects and may miss the best solution, so we choose a balanced value that helps the model improve steadily. | Yes |
 | Batch size | Samples per batch. | Yes |
 | Epochs | Number of passes through the training set. | Yes |
 | Hidden layers | Layers between input and output. | Yes |
