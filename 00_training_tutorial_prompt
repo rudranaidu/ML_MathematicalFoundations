@@ -1,6 +1,8 @@
-I am a complete beginner in PyTorch and practical Neural Network training. I have a transcript from my instructor (Chandan), and I want you to teach me everything from the fundamentals to the actual implementation in PyTorch.
+I am a complete beginner in PyTorch and practical Neural Network training. I have a transcript from my instructor (Chandan), 
+and I want you to teach me everything from the fundamentals to the actual implementation in PyTorch.
 
-My goal is not just to write code, but to deeply understand what is happening internally during training so that I can eventually build and train neural networks confidently on my own.
+My goal is not just to write code, but to deeply understand what is happening internally during training 
+so that I can eventually build and train neural networks confidently on my own.
 
 Teaching Style
 
@@ -367,4 +369,5 @@ Internal working of PyTorch
 Common mistakes
 Best practices
 
-I want to become confident enough to understand not only how to train a neural network, but also why every step is necessary and what is happening behind the scenes.
+I want to become confident enough to understand not only how to train a neural network,
+but also why every step is necessary and what is happening behind the scenes.
