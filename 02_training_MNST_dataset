@@ -1,0 +1,210 @@
+mnst_beginner_project.py
+
+from pathlib import Path
+
+import torch
+from torch import nn
+from torch.utils.data import DataLoader, random_split
+from torchvision import datasets, transforms
+
+
+SEED = 42
+BATCH_SIZE = 64
+EPOCHS = 5
+LEARNING_RATE = 0.001
+DATA_DIR = Path("data")
+MODEL_PATH = Path("mnist_mlp.pt")
+
+
+def get_device():
+    if torch.cuda.is_available():
+        return torch.device("cuda")
+    if hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+        return torch.device("mps")
+    return torch.device("cpu")
+
+
+class DigitMLP(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.flatten = nn.Flatten()
+        self.layers = nn.Sequential(
+            nn.Linear(28 * 28, 128),
+            nn.ReLU(),
+            nn.Linear(128, 64),
+            nn.ReLU(),
+            nn.Linear(64, 10),
+        )
+
+    def forward(self, images):
+        flat_images = self.flatten(images)
+        logits = self.layers(flat_images)
+        return logits
+
+
+def build_data_loaders(device):
+    transform = transforms.Compose(
+        [
+            transforms.ToTensor(),
+            transforms.Normalize((0.1307,), (0.3081,)),
+        ]
+    )
+
+    train_full = datasets.MNIST(
+        root=DATA_DIR,
+        train=True,
+        download=True,
+        transform=transform,
+    )
+    test_dataset = datasets.MNIST(
+        root=DATA_DIR,
+        train=False,
+        download=True,
+        transform=transform,
+    )
+
+    generator = torch.Generator().manual_seed(SEED)
+    train_dataset, val_dataset = random_split(
+        train_full,
+        [55_000, 5_000],
+        generator=generator,
+    )
+
+    pin_memory = device.type == "cuda"
+    train_loader = DataLoader(
+        train_dataset,
+        batch_size=BATCH_SIZE,
+        shuffle=True,
+        pin_memory=pin_memory,
+    )
+    val_loader = DataLoader(
+        val_dataset,
+        batch_size=BATCH_SIZE,
+        shuffle=False,
+        pin_memory=pin_memory,
+    )
+    test_loader = DataLoader(
+        test_dataset,
+        batch_size=BATCH_SIZE,
+        shuffle=False,
+        pin_memory=pin_memory,
+    )
+    return train_loader, val_loader, test_loader
+
+
+def train_one_epoch(model, train_loader, criterion, optimizer, device):
+    model.train()
+    total_loss = 0.0
+    correct = 0
+    total = 0
+
+    for images, labels in train_loader:
+        images = images.to(device)
+        labels = labels.to(device)
+
+        optimizer.zero_grad(set_to_none=True)
+        logits = model(images)
+        loss = criterion(logits, labels)
+        loss.backward()
+        optimizer.step()
+
+        batch_size = images.size(0)
+        total_loss += loss.item() * batch_size
+        predictions = logits.argmax(dim=1)
+        correct += (predictions == labels).sum().item()
+        total += batch_size
+
+    average_loss = total_loss / total
+    accuracy = correct / total
+    return average_loss, accuracy
+
+
+def evaluate(model, data_loader, criterion, device):
+    model.eval()
+    total_loss = 0.0
+    correct = 0
+    total = 0
+
+    with torch.no_grad():
+        for images, labels in data_loader:
+            images = images.to(device)
+            labels = labels.to(device)
+
+            logits = model(images)
+            loss = criterion(logits, labels)
+
+            batch_size = images.size(0)
+            total_loss += loss.item() * batch_size
+            predictions = logits.argmax(dim=1)
+            correct += (predictions == labels).sum().item()
+            total += batch_size
+
+    average_loss = total_loss / total
+    accuracy = correct / total
+    return average_loss, accuracy
+
+
+def show_sample_predictions(model, test_loader, device):
+    model.eval()
+    images, labels = next(iter(test_loader))
+    images = images.to(device)
+
+    with torch.no_grad():
+        logits = model(images)
+        probabilities = torch.softmax(logits, dim=1)
+        predictions = probabilities.argmax(dim=1)
+        confidence = probabilities.max(dim=1).values
+
+    labels = labels.cpu()
+    predictions = predictions.cpu()
+    confidence = confidence.cpu()
+
+    print("\nSample predictions:")
+    for index in range(10):
+        print(
+            f"image {index}: "
+            f"label={labels[index].item()}, "
+            f"prediction={predictions[index].item()}, "
+            f"confidence={confidence[index].item():.2%}"
+        )
+
+
+def main():
+    torch.manual_seed(SEED)
+    device = get_device()
+    print(f"Using device: {device}")
+
+    train_loader, val_loader, test_loader = build_data_loaders(device)
+    model = DigitMLP().to(device)
+    criterion = nn.CrossEntropyLoss()
+    optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
+
+    for epoch in range(EPOCHS):
+        train_loss, train_acc = train_one_epoch(
+            model,
+            train_loader,
+            criterion,
+            optimizer,
+            device,
+        )
+        val_loss, val_acc = evaluate(model, val_loader, criterion, device)
+
+        print(
+            f"epoch {epoch + 1}/{EPOCHS} | "
+            f"train loss {train_loss:.4f} | "
+            f"train acc {train_acc:.2%} | "
+            f"val loss {val_loss:.4f} | "
+            f"val acc {val_acc:.2%}"
+        )
+
+    test_loss, test_acc = evaluate(model, test_loader, criterion, device)
+    print(f"\ntest loss {test_loss:.4f} | test acc {test_acc:.2%}")
+
+    torch.save(model.state_dict(), MODEL_PATH)
+    print(f"Saved model weights to {MODEL_PATH}")
+
+    show_sample_predictions(model, test_loader, device)
+
+
+if __name__ == "__main__":
+    main()
