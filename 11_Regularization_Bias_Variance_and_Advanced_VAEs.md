@@ -336,3 +336,403 @@ Now that we understand **Bias** and **Variance**, the next question naturally ar
 > **How do we intentionally control this tradeoff?**
 
 The answer is **Regularization**, which we will study in the next section.
+
+# 9. Underfitting and Overfitting
+
+Understanding **Bias** and **Variance** naturally leads us to two important concepts in Machine Learning:
+
+* Underfitting
+* Overfitting
+
+Every machine learning model falls somewhere between these two extremes.
+
+---
+
+## Underfitting
+
+A model is said to **underfit** when it is **too simple** to capture the underlying patterns present in the data.
+
+Characteristics of an underfitted model:
+
+* High Bias
+* Low Variance
+* Poor training accuracy
+* Poor test accuracy
+
+### Intuition
+
+Imagine trying to fit a straight line through data that actually follows a curved relationship.
+
+The model is incapable of learning the true pattern because it is too simple.
+
+### Example
+
+Suppose house prices depend on:
+
+* Location
+* Area
+* Number of bedrooms
+* Age of the house
+
+Now imagine using the model:
+
+**Price = ₹50 Lakhs**
+
+for every house.
+
+The model ignores all useful information.
+
+It underfits the data.
+
+---
+
+## Overfitting
+
+A model is said to **overfit** when it memorizes the training data instead of learning the underlying pattern.
+
+Characteristics of an overfitted model:
+
+* Very Low Bias
+* Very High Variance
+* Extremely high training accuracy
+* Poor performance on unseen data
+
+### Intuition
+
+Imagine a student preparing for an exam by memorizing every question from last year's paper.
+
+If the same questions appear again, the student scores 100%.
+
+If the questions change slightly, the student struggles.
+
+The student has memorized rather than understood.
+
+Machine learning models behave in exactly the same way.
+
+---
+
+# 10. Training Error vs Validation Error
+
+One of the most important graphs in Machine Learning is the relationship between:
+
+* Training Error
+* Validation Error
+
+As model complexity increases, both errors behave differently.
+
+```text
+Error
+ ^
+ |
+ |\
+ | \
+ |  \____________________   Training Error
+ |                    \
+ |                     \
+ |                      \
+ |       Validation Error
+ |      \
+ |       \
+ |        \
+ |         \______
+ |                \
+ |                 \
+ +----------------------------------------> Model Complexity
+        Underfitting     Good Fit     Overfitting
+```
+
+### What happens initially?
+
+When the model is very simple:
+
+* Training error is high.
+* Validation error is also high.
+
+The model cannot even explain the training data.
+
+This is the **underfitting region**.
+
+---
+
+### As the model becomes more expressive
+
+Increasing the model complexity allows it to learn more useful patterns.
+
+Both:
+
+* Training Error
+* Validation Error
+
+begin to decrease.
+
+Eventually, the validation error reaches its minimum.
+
+This is the ideal operating point.
+
+---
+
+### What happens after that?
+
+If we continue increasing the model complexity:
+
+Training error keeps decreasing.
+
+Eventually it may even become zero.
+
+However,
+
+Validation error starts increasing.
+
+Why?
+
+Because the model begins memorizing the training dataset rather than learning general patterns.
+
+This is the **overfitting region**.
+
+---
+
+# 11. The Sweet Spot
+
+The goal of Machine Learning is **not** to obtain the lowest training error.
+
+The goal is to obtain the **lowest validation error**.
+
+That point represents the model that generalizes best to unseen data.
+
+Prathosh emphasizes an important observation:
+
+> A model with 100% training accuracy is not necessarily a good model.
+
+It may simply be overfitting the training data.
+
+Always judge a model by how well it performs on **unseen data**, not by how perfectly it memorizes the training data.
+
+---
+
+# 12. What is Model Complexity?
+
+Prathosh uses the term **Model Complexity** repeatedly.
+
+But what exactly does it mean?
+
+Model complexity refers to the model's capacity to represent complicated functions.
+
+A more complex model can fit more intricate relationships.
+
+Examples:
+
+### Linear Regression
+
+Very low complexity.
+
+Can only fit straight lines.
+
+---
+
+### Polynomial Regression
+
+Higher complexity.
+
+Can fit curved relationships.
+
+---
+
+### Neural Networks
+
+Complexity depends on:
+
+* Number of layers
+* Number of neurons
+* Number of learnable parameters
+
+Generally,
+
+more parameters
+
+↓
+
+higher model complexity.
+
+---
+
+# 13. The Practical Strategy Used in Deep Learning
+
+One of the most important practical insights from the lecture is this:
+
+> Modern deep learning **does not begin with a small model.**
+
+Instead,
+
+we deliberately start with a model that is **large enough to overfit**.
+
+Why?
+
+Because it is easier to reduce overfitting than to increase model capacity later.
+
+Prathosh summarizes the strategy as:
+
+1. Build a sufficiently expressive model.
+2. Verify that it can achieve very high training accuracy.
+3. Apply regularization techniques.
+4. Reduce overfitting.
+5. Stop when validation performance is best.
+
+This is the workflow followed in most modern deep learning projects.
+
+---
+
+# 14. What is Regularization?
+
+Now we arrive at the central idea of this chapter.
+
+Regularization is one of the most misunderstood concepts in Machine Learning.
+
+Prathosh gives a very elegant interpretation.
+
+> **Regularization is the deliberate process of increasing the bias of a model in order to reduce its variance.**
+
+At first glance this sounds strange.
+
+Why would we intentionally make our model "worse"?
+
+The answer is simple.
+
+A small increase in bias often leads to a **large reduction in variance**, allowing the model to generalize much better to unseen data.
+
+In other words,
+
+we intentionally sacrifice a little training accuracy to obtain much better real-world performance.
+
+---
+
+# 15. An Intuitive Analogy
+
+Imagine learning to play cricket.
+
+### Student A
+
+Memorizes every ball bowled during practice.
+
+Excellent during practice.
+
+Fails in a real match.
+
+High Variance.
+
+---
+
+### Student B
+
+Learns general batting principles.
+
+Footwork.
+
+Timing.
+
+Shot selection.
+
+May not reproduce every practice ball perfectly.
+
+But performs consistently in new situations.
+
+Low Variance.
+
+Regularization encourages the model to become more like **Student B**.
+
+---
+
+# 16. Early Stopping — The Simplest Regularization Technique
+
+One of the simplest and most widely used regularization methods is **Early Stopping**.
+
+Instead of training forever,
+
+we monitor the validation error.
+
+The moment validation performance starts degrading,
+
+we stop training.
+
+The model obtained at that point is used for deployment.
+
+The workflow is:
+
+1. Split the dataset into:
+
+   * Training Set
+   * Validation Set
+   * Test Set
+
+2. Train using only the Training Set.
+
+3. After every epoch, evaluate the model on the Validation Set.
+
+4. Continue training while validation performance improves.
+
+5. Stop when validation performance starts becoming worse.
+
+This prevents the model from entering the overfitting region.
+
+---
+
+# 17. Why Validation Data Exists
+
+A common beginner question is:
+
+> Why do we need a validation dataset?
+
+The answer is that validation data is used to make **training decisions**, such as:
+
+* Choosing the learning rate.
+* Selecting the number of layers.
+* Selecting the number of epochs.
+* Deciding when to stop training.
+* Choosing hyperparameters.
+
+Validation data actively guides model development.
+
+---
+
+# 18. Why Test Data Must Never Be Used During Training
+
+The **test dataset** has a completely different purpose.
+
+It should remain untouched until the very end.
+
+Using test accuracy to modify your model introduces **Test Data Leakage**.
+
+For example:
+
+1. Train a model.
+2. Evaluate on the test set.
+3. Notice poor performance.
+4. Change the architecture.
+5. Evaluate again on the same test set.
+
+Although the test data was never directly used for gradient descent,
+
+it still influenced the model design.
+
+This is called **Test Data Leakage**.
+
+It produces overly optimistic performance estimates.
+
+Therefore,
+
+**Validation Set → Model Development**
+
+**Test Set → Final Evaluation Only**
+
+---
+
+# Key Insights
+
+* Underfitting corresponds to **High Bias** and **Low Variance**.
+* Overfitting corresponds to **Low Bias** and **High Variance**.
+* The objective is to minimize **Validation Error**, not Training Error.
+* Modern deep learning intentionally starts with models capable of overfitting.
+* Regularization increases model bias to reduce variance.
+* Early Stopping is one of the simplest and most effective regularization techniques.
+* Validation data guides training.
+* Test data should never influence model development.
+
