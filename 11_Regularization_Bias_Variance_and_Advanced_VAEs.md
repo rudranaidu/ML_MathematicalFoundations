@@ -736,3 +736,464 @@ Therefore,
 * Validation data guides training.
 * Test data should never influence model development.
 
+# 19. Parameter Regularization
+
+So far, we have understood that regularization is the process of **increasing model bias** to reduce variance.
+
+The next question is:
+
+> **How do we actually increase the bias of a model?**
+
+One of the most common approaches is **Parameter Regularization**.
+
+The basic idea is simple.
+
+Instead of allowing the model parameters to take any arbitrary values,
+
+we restrict the range of values they are allowed to take.
+
+---
+
+## Why Does This Increase Bias?
+
+Suppose we are fitting a polynomial to ten data points.
+
+If we allow the polynomial coefficients to become arbitrarily large,
+
+the polynomial can twist and bend until it passes through every training point.
+
+This produces:
+
+* Very low training error
+* Very low bias
+* Very high variance
+
+Now imagine restricting those coefficients.
+
+For example,
+
+instead of allowing weights like
+
+100
+
+250
+
+−180
+
+we encourage them to remain closer to zero.
+
+The model loses some flexibility.
+
+It can no longer perfectly memorize the training data.
+
+As a result:
+
+* Bias increases slightly.
+* Variance decreases significantly.
+
+This is exactly what regularization tries to achieve.
+
+---
+
+# 20. Parameter Penalty
+
+Instead of minimizing only the learning objective,
+
+we now optimize:
+
+**Total Loss = Original Loss + Regularization Penalty**
+
+The second term penalizes large parameter values.
+
+The optimization objective becomes:
+
+**Loss = Data Loss + α × Regularization Penalty**
+
+where
+
+* Data Loss measures how well the model fits the training data.
+* α (alpha) controls the strength of regularization.
+
+A larger value of α means stronger regularization.
+
+---
+
+# 21. L2 Regularization (Weight Decay)
+
+The most common regularization technique is **L2 Regularization**.
+
+Instead of allowing weights to grow without bound,
+
+we penalize the squared magnitude of every parameter.
+
+Conceptually:
+
+Penalty = Sum of (weight²)
+
+This encourages every weight to remain small.
+
+### Why is it called Weight Decay?
+
+During optimization,
+
+large weights gradually shrink toward zero.
+
+Hence the name:
+
+**Weight Decay**
+
+---
+
+### Intuition
+
+Imagine stretching a rubber band.
+
+The farther you pull,
+
+the stronger the restoring force.
+
+L2 regularization behaves similarly.
+
+The larger a weight becomes,
+
+the stronger the optimization process tries to pull it back.
+
+---
+
+# 22. L1 Regularization
+
+Another popular regularization method is **L1 Regularization**.
+
+Instead of squaring the weights,
+
+we penalize their absolute values.
+
+Conceptually:
+
+Penalty = Sum of |weight|
+
+Unlike L2,
+
+L1 encourages many parameters to become **exactly zero**.
+
+Therefore,
+
+L1 naturally performs **feature selection**.
+
+The model automatically learns which parameters are useful and which can be ignored.
+
+---
+
+# 23. Comparing L1 and L2
+
+| L1 Regularization                | L2 Regularization                    |
+| -------------------------------- | ------------------------------------ |
+| Uses absolute values             | Uses squared values                  |
+| Produces sparse models           | Produces smooth models               |
+| Many weights become exactly zero | Weights become small but rarely zero |
+| Useful for feature selection     | Useful for improving generalization  |
+
+Both methods increase the bias of the model,
+
+thereby reducing variance.
+
+---
+
+# 24. A Different Way to Regularize
+
+Until now,
+
+we have been regularizing **model parameters**.
+
+Prathosh now introduces a much deeper idea.
+
+Instead of constraining the parameters,
+
+why not constrain the **latent variables themselves?**
+
+This is one of the key ideas behind Variational Autoencoders.
+
+---
+
+# 25. Neural Networks as Latent Variable Models
+
+Consider a simple neural network.
+
+```text
+Input (X)
+      │
+      ▼
+Layer 1 Output (Z₁)
+      │
+      ▼
+Layer 2 Output (Z₂)
+      │
+      ▼
+Layer 3 Output (Z₃)
+      │
+      ▼
+Output (Y)
+```
+
+Notice something interesting.
+
+The output of every hidden layer is **not directly observed**.
+
+These hidden representations are exactly what we call **latent variables**.
+
+Therefore,
+
+a neural network itself can be viewed as a **latent variable model**.
+
+Each hidden layer learns a new representation of the input.
+
+---
+
+# 26. Latent Variable Regularization
+
+If every hidden layer is a latent variable,
+
+then we can regularize:
+
+* the model parameters θ
+
+or
+
+* the latent variables Z
+
+Both approaches ultimately influence the learned model.
+
+Instead of saying:
+
+"Keep the weights small"
+
+we can instead say:
+
+"Restrict how the latent representations are allowed to behave."
+
+This introduces another powerful class of regularization methods.
+
+---
+
+# 27. Why Does Regularizing Latent Variables Work?
+
+Every latent variable is produced by the model parameters.
+
+Therefore,
+
+changing the latent variables indirectly changes the parameters.
+
+Think of the relationship like this:
+
+```text
+Parameters (θ)
+        │
+        ▼
+Latent Variables (Z)
+        │
+        ▼
+Predictions
+```
+
+If we constrain the latent variables,
+
+the parameters must automatically adjust themselves to satisfy those constraints.
+
+Thus,
+
+**Regularizing latent variables indirectly regularizes the model parameters.**
+
+This is one of the most important conceptual ideas in this lecture.
+
+---
+
+# 28. Normalization as Regularization
+
+Prathosh makes another beautiful observation.
+
+Many techniques that practitioners use every day are actually forms of **latent-variable regularization**.
+
+Examples include:
+
+* Batch Normalization
+* Layer Normalization
+
+These methods do not directly modify the model parameters.
+
+Instead,
+
+they constrain the outputs of hidden layers.
+
+Since hidden-layer outputs are latent variables,
+
+normalization becomes a form of latent-space regularization.
+
+---
+
+# 29. Batch Normalization
+
+Batch Normalization computes:
+
+* Mean of a mini-batch
+* Variance of a mini-batch
+
+Every hidden activation is then transformed so that the batch approximately has:
+
+* Mean = 0
+* Variance = 1
+
+Conceptually:
+
+```text
+Original Activations
+
+2.1
+3.7
+5.8
+1.5
+
+↓
+
+Normalize
+
+Mean = 0
+Variance = 1
+```
+
+By restricting the distribution of latent variables,
+
+the model becomes more stable during training.
+
+This also acts as a regularizer.
+
+---
+
+# 30. Layer Normalization
+
+Layer Normalization follows the same idea,
+
+but computes statistics across the **features within a single example** rather than across the batch.
+
+Therefore:
+
+### BatchNorm
+
+Normalize across:
+
+**Training Examples**
+
+---
+
+### LayerNorm
+
+Normalize across:
+
+**Feature Dimensions**
+
+Layer Normalization is widely used in:
+
+* Transformers
+* Large Language Models
+* GPT
+* BERT
+
+---
+
+# 31. Why Does Normalization Increase Bias?
+
+At first,
+
+normalization looks like a simple mathematical transformation.
+
+However,
+
+Prathosh encourages us to think more deeply.
+
+By forcing latent variables to follow a specific distribution,
+
+we are restricting the space of possible representations.
+
+The model now has **less freedom**.
+
+Less freedom means:
+
+* Higher Bias
+* Lower Variance
+
+Therefore,
+
+normalization is fundamentally another form of regularization.
+
+---
+
+# 32. Architectural Regularization
+
+Prathosh introduces one of the most insightful ideas of the lecture.
+
+He argues that even **neural network architectures themselves** can be viewed as forms of regularization.
+
+Think about a fully connected neural network.
+
+Every neuron connects to every neuron in the next layer.
+
+```text
+Every Node
+     │
+     ▼
+Every Node
+```
+
+Now consider a Convolutional Neural Network (CNN).
+
+Each neuron connects only to a small local region.
+
+Many possible connections are permanently removed.
+
+Those missing connections can be viewed as parameters that are permanently fixed to zero.
+
+In other words,
+
+the architecture itself imposes constraints on the parameter space.
+
+Those constraints increase model bias.
+
+Hence,
+
+CNNs are simply **strongly regularized fully connected neural networks.**
+
+---
+
+# 33. A Powerful Perspective
+
+This viewpoint extends beyond CNNs.
+
+Many modern architectures can be interpreted as different ways of introducing useful inductive biases.
+
+Examples:
+
+* CNN → Local connectivity bias
+* RNN → Sequential dependency bias
+* Transformer → Attention-based bias
+
+Each architecture introduces a different kind of regularization that is well suited for a particular type of data.
+
+This explains why:
+
+* CNNs work well for images.
+* RNNs work well for sequential data.
+* Transformers work well for language.
+
+The architecture itself becomes a way of controlling the Bias–Variance tradeoff.
+
+---
+
+# Key Insights
+
+* Parameter regularization limits how large model weights can become.
+* L2 regularization is also known as Weight Decay.
+* L1 regularization encourages sparse models.
+* Hidden layers of neural networks can be viewed as latent variables.
+* Regularizing latent variables indirectly regularizes model parameters.
+* Batch Normalization and Layer Normalization are both forms of latent-space regularization.
+* Neural network architectures themselves can be interpreted as different forms of regularization.
+* CNNs, RNNs, and Transformers introduce different inductive biases that improve generalization for different kinds of data.
