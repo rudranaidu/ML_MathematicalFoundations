@@ -131,7 +131,7 @@ This is why sequence modeling must preserve order.
 
 # 4. What is a Sequence?
 
-Prathosh now introduces a slight change in notation.
+We now introduces a slight change in notation.
 
 Until now,
 
