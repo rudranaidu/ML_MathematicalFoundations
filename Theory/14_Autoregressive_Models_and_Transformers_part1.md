@@ -400,7 +400,7 @@ Only the nature of the data has changed.
 
 # 10. Autoregressive Modeling
 
-Prathosh introduces a completely new family of generative models.
+We introduce a completely new family of generative models.
 
 These are called
 
