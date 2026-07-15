@@ -314,7 +314,7 @@ a sequence is nothing more than
 
 a collection of vectors.
 
-This is exactly the notation Prathosh uses throughout the lecture.
+This is exactly the notation we uses throughout the lecture.
 
 ---
 
