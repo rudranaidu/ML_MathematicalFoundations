@@ -428,7 +428,7 @@ important details are gradually lost.
 
 # 38. The Vanishing Gradient Problem
 
-Prathosh explains that this issue can also be understood mathematically.
+This issue can also be understood mathematically.
 
 During training,
 
